@@ -18,7 +18,7 @@ router.get('/:id', (req, res, next) => {
     proteges WHERE idp = $1', [id], (error, results) => {
         if(error) { throw error }
         res.status(200).json(results.rows)
-        console.log(results.rows)
+        console.log(typeof results.rows, results.rows)
     })
 })
 
