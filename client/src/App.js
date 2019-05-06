@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import * as ReactBootstrap from 'react-bootstrap';
 import './App.css';
 
 class App extends Component {
@@ -22,12 +23,13 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h2>Podopieczni:</h2>
-          <ol>
             {this.state.apiResponse.map(resp => 
-              <li key={resp.idp}><button>Edytuj</button> {resp.firstname} {resp.secondname}</li>)
-            }
-          </ol>
+              <ReactBootstrap.ButtonToolbar key={resp.secondname}>
+                <ReactBootstrap.Button variant="primary" key={resp.idp} size="md" block>
+                  {resp.firstname} {resp.secondname}
+                </ReactBootstrap.Button>
+              </ReactBootstrap.ButtonToolbar>
+            )}
         </header>
       </div>
     );
