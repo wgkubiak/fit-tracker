@@ -25,7 +25,7 @@ class App extends Component {
           <h2>Podopieczni:</h2>
           <ol>
             {this.state.apiResponse.map(resp => 
-              <li key={resp.idp}>{resp.firstname} {resp.secondname}</li>)
+              <li key={resp.idp}><button>Edytuj</button> {resp.firstname} {resp.secondname}</li>)
             }
           </ol>
         </header>
