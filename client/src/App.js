@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 import * as ReactBootstrap from 'react-bootstrap';
-import '../styles/Proteges.css';
+import './App.css';
 
-class Proteges extends Component {
+class App extends Component {
   constructor(props) {
     super(props)
-    this.state = {apiResponse: [], show: false}
+    this.state = {
+      apiResponse: [],  
+      measuresResponse: [], 
+      show: true
+    }
     this.toggleDiv = this.toggleDiv.bind(this)
   }
 
@@ -39,7 +43,8 @@ class Proteges extends Component {
         <ReactBootstrap.Button variant="light" size="md" onClick={ this.toggleDiv } block>
             Dodaj podopiecznego
         </ReactBootstrap.Button>
-        { this.state.show && <ProtegesForm /> }
+        { this.state.show && <ProtegesForm />}
+        { <Measures />}
       </div>
     );
   }
@@ -52,4 +57,18 @@ class ProtegesForm extends Component {
     )
   }
 }
-export default Proteges;
+
+class Measures extends App {
+  render() {
+    return (
+      <div className="measures">
+        <h1>Pomiary</h1> 
+        <ReactBootstrap.Button variant="light" size="md" block>
+        Dodaj pomiar
+        </ReactBootstrap.Button>
+      </div>
+    );
+  }
+}
+
+export default App;
