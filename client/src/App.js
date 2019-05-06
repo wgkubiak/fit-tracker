@@ -22,6 +22,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <h2>Podopieczni:</h2>
           <ol>
             {this.state.apiResponse.map(resp => 
               <li key={resp.idp}>{resp.firstname} {resp.secondname}</li>)

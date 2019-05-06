@@ -1,10 +1,24 @@
 .App-header {
+  background-color: rgba( 77,125, 96,0.8); 
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(6px + 2vmin);
-  color: black;
+  position: absolute;
+  width: 40%;
+  top: 20%;
+  left: 10%;
+  border-radius: 1em;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
+
+.App-header > h2 {
+  position: relative;
+  top: 0%;
+  background-color: rgba( 30, 82, 51,1);
+  text-align: center;
+}
+
 .App-link {
   color: #61dafb;
 }
