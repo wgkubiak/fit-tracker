@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS proteges;
 
 CREATE TABLE proteges(
-	idp SERIAL PRIMARY KEY AUTO_INCREMENT,
+	idp SERIAL PRIMARY KEY,
 	firstName VARCHAR(20) NOT NULL,
     secondName VARCHAR(30) NOT NULL,
     birthDate DATE NOT NULL,
@@ -71,7 +71,7 @@ INSERT INTO measures (p_id, currentWeight, waist, neck, bodyFat, measureDate) VA
 DROP TABLE IF EXISTS daily;
 
 CREATE TABLE daily (
-	idd INTEGER AUTO_INCREMENT PRIMARY KEY,
+	idd INTEGER PRIMARY KEY,
 	p_id INTEGER NOT NULL,
 	dailyDate DATE,
 	dailyKcal INTEGER NOT NULL,
@@ -89,7 +89,7 @@ INSERT INTO daily (p_id, dailyDate, dailyKcal, burnedKcal) VALUES
 DROP TABLE IF EXISTS meals;
 
 CREATE TABLE meals (
-    idm SERIAL PRIMARY KEY AUTO_INCREMENT,
+    idm SERIAL PRIMARY KEY,
     d_id INTEGER NOT NULL,
     mealName VARCHAR(30) NOT NULL,
     kcalPerDg INTEGER NOT NULL,

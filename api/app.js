@@ -8,10 +8,6 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI')
 var protegesRouter = require('./routes/proteges')
-var dailyRouter = require('./routes/daily')
-var measureRouter = require('./routes/measures')
-var mealRouter = require('./routes/meals')
-var exerciseRouter = require('./routes/exercises')
 
 var app = express();
 
@@ -32,8 +28,9 @@ app.use('/', indexRouter);
 
 app.use('/testAPI', testAPIRouter)
 
+app.use('/proteges', protegesRouter)
 
-
+app.use('/proteges/:id', protegesRouter)
 // End of our requests
 
 // catch 404 and forward to error handler
