@@ -47,7 +47,7 @@ class Proteges extends Component {
       <div className="proteges">
       <h1>Podopieczni</h1>
         {this.state.apiResponse.map(resp => 
-          <ReactBootstrap.ButtonToolbar key={ resp.secondname }>
+          <ReactBootstrap.ButtonToolbar>
           <ReactBootstrap.Button variant="dark" key={ resp.idp } size="md" active>
             { resp.firstname } { resp.secondname }
           </ReactBootstrap.Button>
@@ -86,49 +86,46 @@ class ProtegesForm extends Component {
     targetweight: ''
   }
   
+  handleNameChange = event => { this.setState({ firstname : event.target.value });}
+  handleSurnameChange = event => { this.setState({ secondname : event.target.value });}
+  handlePhoneChange = event => { this.setState({ phone : event.target.value });}
+  handleEmailChange = event => { this.setState({ email : event.target.value });}
+  handleGenderChange = event => { this.setState({ gender : event.target.value });}
+  handleHeightChange = event => { this.setState({ height : event.target.value });}
+  handleTargetChange = event => { this.setState({ targetweight : event.target.value });}
+
   handleSubmit = event => {
     event.preventDefault()
 
-    this.setState({
-      firstname: 'Jan',
-      secondname: 'Brzechwa',
-      phone: '514234623',
-      email: 'jan@outlook.com',
-      gender: 'M',
-      height: '174',
-      targetweight: '74'
-    });
-
-    const protege = {
-      firstame: this.state.firstname,
+    axios.post('http://localhost:9000/proteges', {
+      firstname: this.state.firstname,
       secondname: this.state.secondname,
       phone: this.state.phone,
       email: this.state.email,
       gender: this.state.gender,
       height: this.state.height,
       targetweight: this.state.targetweight
-    }
-
-    axios.post('http://localhost:9000/proteges', {
-      firstname: 'Jan',
-      secondname: 'Brzechwa',
-      phone: '514234623',
-      email: 'jan@outlook.com',
-      gender: 'M',
-      height: '174',
-      targetweight: '74'})
-      .then(res=> {
-        console.log(res)
-        console.log(res.data)
-      })
+    })
+    .then(res=> {
+      console.log(res)
+      console.log(res.data)
+    })
   }
 
   render() {
     return (
       <div className="creation-form">
-        <ReactBootstrap.Button variant="light" size="md" onClick={ this.handleSubmit } active>
-            <strong>+</strong>
-        </ReactBootstrap.Button>
+        <form onSubmit={this.handleSubmit}>
+            <label> Imię: <input type="text" name="firstname" onChange={this.handleNameChange} required/></label>
+            <label> Nazwisko: <input type="text" name="secondname" onChange={this.handleSurnameChange} required/></label>
+            <label> Telefon: <input type="text" name="phone" onChange={this.handlePhoneChange} required/></label>
+            <label> Email: <input type="email" name="email" onChange={this.handleEmailChange} required/></label>
+            <label> Płeć: <input type="text" name="gender" onChange={this.handleGenderChange} required/></label>
+            <label> Wzrost: <input type="text" name="height" onChange={this.handleHeightChange} required/></label>
+            <label> Cel: <input type="text" name="targetweight" onChange={this.handleTargetChange} required/></label>
+            
+            <button type="submit">Add</button>
+        </form>
       </div>
     );
   }
