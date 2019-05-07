@@ -1,17 +1,29 @@
-.proteges { 
+.container { 
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
-  width: 40%;
+  position: absolute;
+  width: 100%;
   margin-bottom: 5px;
-  top: 20%;
-  left: 10%;
+  top: 10%;
+  left: 0%;
   font-size: calc(10px + 2vmin);
 }
 
-.proteges > h2 {
+.container > h2 {
   text-align: center
+}
+
+.proteges, .measures {
+  width: 100%;
+  position:relative;
+}
+
+.creation-form {
+  position: absolute;
+  width: 40%;
+  right: 20%;
+  top: 0%
 }
 
 .App-link {

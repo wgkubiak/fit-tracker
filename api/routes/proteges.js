@@ -7,7 +7,6 @@ router.get('/', (req, res, next) => {
     (error, results) => {
         if(error) {throw error}
         res.status(200).json(results.rows)
-        console.log(results.rows)
     })
 })
 
@@ -18,7 +17,19 @@ router.get('/:id', (req, res, next) => {
     proteges WHERE idp = $1', [id], (error, results) => {
         if(error) { throw error }
         res.status(200).json(results.rows)
-        console.log(typeof results.rows, results.rows)
+    })
+})
+
+
+router.post('/', (request, response) => {
+    const { firstname, secondname, phone, email, gender, height, targetweight } = request.body
+  
+    pool.query('INSERT INTO proteges (firstname, secondname, phone, email, gender, height, targetweight)\
+     VALUES ($1, $2, $3, $4, $5, $6, $7)', [ firstname, secondname, phone, email, gender, height, targetweight ], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(201).send(`User added with ID: ${results.idp}`)
     })
 })
 

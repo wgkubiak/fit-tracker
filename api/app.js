@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI')
 var protegesRouter = require('./routes/proteges')
+var measuresRouter = require('./routes/measures')
 
 var app = express();
 
@@ -29,8 +30,10 @@ app.use('/', indexRouter);
 app.use('/testAPI', testAPIRouter)
 
 app.use('/proteges', protegesRouter)
-
 app.use('/proteges/:id', protegesRouter)
+
+app.use('/measures', measuresRouter)
+app.use('/measures/:id', measuresRouter)
 // End of our requests
 
 // catch 404 and forward to error handler
