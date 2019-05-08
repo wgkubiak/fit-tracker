@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <div className="container">
         { <Proteges />}
-        { <Measures />}
+        { <Daily />}
       </div>
     );
   }
@@ -19,18 +19,17 @@ class Proteges extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: true,
-      apiResponse: [],
-      protegesResponse: []
+      show: false,
+      measuresResponse: [],
     }
     this.toggleDiv = this.toggleDiv.bind(this)
   }
-  
-  getAllProteges() {
-    fetch("http://localhost:9000/proteges")
+
+  getLastMeasure() {
+    fetch("http://localhost:9000/measures")
       .then(res => res.json())
-      .then(res => this.setState({ apiResponse: res }))
-      .catch(err => err)   
+      .then(res => this.setState({ measuresResponse: res}))
+      .catch(err => err)
   }
 
   toggleDiv() {
@@ -39,34 +38,51 @@ class Proteges extends Component {
   }
 
   componentDidMount() {
-    this.getAllProteges()
+    this.getLastMeasure()
   }
 
   render() {
     return(
       <div className="proteges">
-      <h1>Podopieczni</h1>
-        {this.state.apiResponse.map(resp => 
-          <ReactBootstrap.ButtonToolbar>
-          <ReactBootstrap.Button variant="dark" key={ resp.idp } size="md" active>
-            { resp.firstname } { resp.secondname }
-          </ReactBootstrap.Button>
-          </ReactBootstrap.ButtonToolbar> 
+      <br></br><h1><u>Podopieczni</u></h1><br></br>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Imię</th>
+            <th scope="col">Nazwisko</th>
+            <th scope="col">Do celu</th>
+            <th scope="col">Tłuszcz</th>
+          </tr>
+        </thead>
+        <tbody>
+        {this.state.measuresResponse.map(resp => 
+          <tr>
+            <th scope="row">{resp.idp}</th>
+            <td>{resp.firstname}</td>
+            <td>{resp.secondname}</td>
+            <td>{(resp.currentweight - resp.targetweight).toFixed(2)}</td>
+            <td>{resp.bodyfat.toFixed(1)}</td>
+          </tr>
         )}
-          <ReactBootstrap.Button variant="light" size="md" onClick={ this.toggleDiv } active>
-            <strong>+</strong>
-          </ReactBootstrap.Button>
-        { this.state.show && <ProtegesForm />}
+        </tbody>
+        </table>
+          <ReactBootstrap.ButtonToolbar>
+            <ReactBootstrap.Button variant="dark" size="md" onClick={ this.toggleDiv } active>
+              <strong>Rozwiń / Zwiń formularz</strong>
+            </ReactBootstrap.Button>
+            { this.state.show && <ProtegesForm />}
+          </ReactBootstrap.ButtonToolbar> 
         </div>
     );
   }
 }
 
-class Measures extends Proteges {
+class Daily extends Proteges {
   render() {
     return (
-      <div className="measures">
-        <h1>Pomiary</h1> 
+      <div className="daily">
+        <h1><u>Statystyki dzienne</u></h1> 
         <ReactBootstrap.Button variant="light" size="md" active>
           <strong>+</strong>
         </ReactBootstrap.Button>
@@ -75,7 +91,7 @@ class Measures extends Proteges {
   }
 }
 
-class ProtegesForm extends Component {
+class ProtegesForm extends Proteges {
   state = {
     firstname: '',
     secondname: '',
@@ -115,17 +131,31 @@ class ProtegesForm extends Component {
   render() {
     return (
       <div className="creation-form">
-        <form onSubmit={this.handleSubmit}>
-            <label> Imię: <input type="text" name="firstname" onChange={this.handleNameChange} required/></label>
-            <label> Nazwisko: <input type="text" name="secondname" onChange={this.handleSurnameChange} required/></label>
-            <label> Telefon: <input type="text" name="phone" onChange={this.handlePhoneChange} required/></label>
-            <label> Email: <input type="email" name="email" onChange={this.handleEmailChange} required/></label>
-            <label> Płeć: <input type="text" name="gender" onChange={this.handleGenderChange} required/></label>
-            <label> Wzrost: <input type="text" name="height" onChange={this.handleHeightChange} required/></label>
-            <label> Cel: <input type="text" name="targetweight" onChange={this.handleTargetChange} required/></label>
-            
-            <button type="submit">Add</button>
-        </form>
+      <h1>Formularz</h1>
+        <ReactBootstrap.Form onSubmit={this.handleSubmit}>
+              <ReactBootstrap.Form.Label> 
+                Imię: <input type="text" name="firstname" onChange={this.handleNameChange} placeholder="Podaj imię" required/>
+              </ReactBootstrap.Form.Label>
+              <ReactBootstrap.Form.Label> 
+                Nazwisko: <input type="text" name="secondname" onChange={this.handleSurnameChange} placeholder="Podaj nazwisko" required/>
+              </ReactBootstrap.Form.Label>
+              <ReactBootstrap.Form.Label> 
+                Telefon: <input type="text" name="phone" onChange={this.handlePhoneChange} placeholder="Podaj numer" size="9" required/>
+              </ReactBootstrap.Form.Label>
+              <ReactBootstrap.Form.Label> 
+                Email: <input type="email" name="email" onChange={this.handleEmailChange} placeholder="Podaj email" required/>
+              </ReactBootstrap.Form.Label>
+              <ReactBootstrap.Form.Label> 
+                Płeć: <input type="text" name="gender" onChange={this.handleGenderChange} placeholder="Płeć (M/F)" required/>
+              </ReactBootstrap.Form.Label>
+              <ReactBootstrap.Form.Label> 
+                Wzrost: <input type="text" name="height" onChange={this.handleHeightChange} placeholder="Podaj wzrost" required/>
+              </ReactBootstrap.Form.Label>
+              <ReactBootstrap.Form.Label> 
+                Cel: <input type="text" name="targetweight" onChange={this.handleTargetChange} placeholder="Podaj cel" required/>
+              </ReactBootstrap.Form.Label>
+            <ReactBootstrap.Button type="submit" variant="dark" size="lg" block>Zatwierdź</ReactBootstrap.Button>
+        </ReactBootstrap.Form>
       </div>
     );
   }

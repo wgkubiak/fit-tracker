@@ -9,3 +9,7 @@
 .rgba-primary-2 { color: rgba(109,150,126,1) }
 .rgba-primary-3 { color: rgba( 53, 99, 72,1) }
 .rgba-primary-4 { color: rgba( 30, 82, 51,1) }
+
+#container {
+    background-color: black
+}
