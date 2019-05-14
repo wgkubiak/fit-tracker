@@ -9,6 +9,7 @@ var indexRouter = require('./routes/index');
 var testAPIRouter = require('./routes/testAPI')
 var protegesRouter = require('./routes/proteges')
 var measuresRouter = require('./routes/measures')
+var dailyRouter = require('./routes/daily')
 
 var app = express();
 
@@ -34,7 +35,10 @@ app.use('/proteges/:id', protegesRouter)
 
 app.use('/measures', measuresRouter)
 app.use('/measures/:id', measuresRouter)
+app.use('/measures/last/:id', measuresRouter)
 
+app.use('/daily', dailyRouter)
+app.use('/daily/:id', dailyRouter)
 
 // End of our requests
 

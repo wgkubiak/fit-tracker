@@ -5,31 +5,49 @@ import axios from 'axios';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      globalID: 0
+    }
+  }
+
   render() {
     return (
       <div className="container">
+        { <Nav />}
         { <Proteges />}
+        { <Measures />}
         { <Daily />}
+        { <Foot />}
       </div>
     );
   }
 }
 
-class Proteges extends Component {
+class Proteges extends App {
   constructor(props) {
     super(props)
     this.state = {
       show: false,
       measuresResponse: [],
+      userResponse: []
     }
     this.toggleDiv = this.toggleDiv.bind(this)
   }
 
   getLastMeasure() {
-    fetch("http://localhost:9000/measures")
+    fetch("http://localhost:9000/measures/last/1")
       .then(res => res.json())
       .then(res => this.setState({ measuresResponse: res}))
       .catch(err => err)
+  }
+
+  getUserByID() {
+    fetch("http://localhost:9000/proteges/1")
+      .then(res=>res.json())
+      .then(res=>this.setState({ userResponse: res}))
+      .catch(err=>err)
   }
 
   toggleDiv() {
@@ -39,59 +57,114 @@ class Proteges extends Component {
 
   componentDidMount() {
     this.getLastMeasure()
+    this.getUserByID()
   }
 
   render() {
     return(
       <div className="proteges">
-      <br></br><h1><u>Podopieczni</u></h1><br></br>
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Imię</th>
-            <th scope="col">Nazwisko</th>
-            <th scope="col">Do celu</th>
-            <th scope="col">Tłuszcz</th>
-          </tr>
-        </thead>
-        <tbody>
-        {this.state.measuresResponse.map(resp => 
-          <tr>
-            <th scope="row">{resp.idp}</th>
-            <td>{resp.firstname}</td>
-            <td>{resp.secondname}</td>
-            <td>{(resp.currentweight - resp.targetweight).toFixed(2)}</td>
-            <td>{resp.bodyfat.toFixed(1)}</td>
-          </tr>
-        )}
-        </tbody>
-        </table>
-          <ReactBootstrap.ButtonToolbar>
-            <ReactBootstrap.Button variant="dark" size="md" onClick={ this.toggleDiv } active>
-              <strong>Rozwiń / Zwiń formularz</strong>
+        <br></br>
+        <br></br>
+        <br></br>
+        <div id="proteges-header-container">
+          <span id="prev-protege-btn">
+            <ReactBootstrap.Button variant="success" size="md" active>
+              <strong> &laquo; </strong>
             </ReactBootstrap.Button>
-            { this.state.show && <ProtegesForm />}
-          </ReactBootstrap.ButtonToolbar> 
+          </span>
+          {this.state.userResponse.map(resp => 
+            <span id="proteges-header">
+              <h2 id="protege-header-txt"> {resp.firstname} {resp.secondname} </h2>
+            </span>
+          )}
+          <span id="next-protege-btn">
+            <ReactBootstrap.Button variant="success" size="md" active>
+              <strong> &raquo; </strong>
+            </ReactBootstrap.Button>
+          </span>
         </div>
+        {this.state.measuresResponse.map(resp => 
+          <h3> Do celu: <span id="target-txt">{(resp.currentweight - resp.targetweight).toFixed(1)}</span> kg</h3>
+        )}
+
+        <ReactBootstrap.ButtonToolbar>
+          <ReactBootstrap.Button variant="success" size="md" onClick={ this.toggleDiv } active>
+            <strong>Rozwiń / Zwiń formularz</strong>
+          </ReactBootstrap.Button>
+            { this.state.show && <ProtegesForm />}
+        </ReactBootstrap.ButtonToolbar> 
+      </div>
     );
   }
 }
 
-class Daily extends Proteges {
+class Measures extends App {
+  constructor(props) {
+    super(props)
+    this.state = {
+      measuresByIDResponse: []
+    }
+  }
+
+  getMeasureByID() {
+    fetch("http://localhost:9000/measures/1")
+      .then(res=>res.json())
+      .then(res=>this.setState({ measuresByIDResponse: res}))
+      .catch(err=>err)
+  }
+
+  componentDidMount() {
+    this.getMeasureByID()
+  }
+
+  render() {
+    return(
+      <div className="proteges">
+        <table className="table">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col">Data</th>
+              <th scope="col">Pas</th>
+              <th scope="col">Szyja</th>
+              <th scope="col">Tłuszcz</th>
+              <th scope="col">Waga</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.measuresByIDResponse.map(resp => 
+            <tr>
+              <th scope="row">{resp.measuredate.slice(0, -14)}</th>
+              <td>{resp.waist}</td>
+              <td>{resp.neck}</td>
+              <td>{resp.bodyfat.toFixed(1)}</td>
+              <td>{(resp.currentweight).toFixed(2)}</td>
+            </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+class Daily extends App {
+  constructor(props) {
+    super(props)
+    this.state = {
+      dailyResponse: []
+    }
+}
+
   render() {
     return (
       <div className="daily">
-        <h1><u>Statystyki dzienne</u></h1> 
-        <ReactBootstrap.Button variant="light" size="md" active>
-          <strong>+</strong>
-        </ReactBootstrap.Button>
+       
       </div>    
     );
   }
 }
 
-class ProtegesForm extends Proteges {
+class ProtegesForm extends App {
   state = {
     firstname: '',
     secondname: '',
@@ -126,6 +199,7 @@ class ProtegesForm extends Proteges {
       console.log(res)
       console.log(res.data)
     })
+    
   }
 
   render() {
@@ -158,6 +232,46 @@ class ProtegesForm extends Proteges {
         </ReactBootstrap.Form>
       </div>
     );
+  }
+}
+
+class Nav extends Component {
+  render() {
+    return (
+      <div id="menu-nav">
+        <ReactBootstrap.Navbar fixed="top" bg="success" expand="lg">
+          <ReactBootstrap.Navbar.Brand href="#home">Fit Tracker</ReactBootstrap.Navbar.Brand>
+          <ReactBootstrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <ReactBootstrap.Navbar.Collapse id="basic-navbar-nav">
+            <ReactBootstrap.Nav className="mr-auto">
+              <ReactBootstrap.Nav.Link href="#home">Podopieczni</ReactBootstrap.Nav.Link>
+              <ReactBootstrap.Nav.Link href="#link">Wymiary</ReactBootstrap.Nav.Link>
+              <ReactBootstrap.NavDropdown title="Dodaj" id="basic-nav-dropdown">
+          <ReactBootstrap.NavDropdown.Item href="#action/3.1">Podopiecznego</ReactBootstrap.NavDropdown.Item>
+          <ReactBootstrap.NavDropdown.Item href="#action/3.2">Wymiar</ReactBootstrap.NavDropdown.Item>
+          <ReactBootstrap.NavDropdown.Item href="#action/3.3">Statystykę</ReactBootstrap.NavDropdown.Item>
+          </ReactBootstrap.NavDropdown>
+            </ReactBootstrap.Nav>
+          </ReactBootstrap.Navbar.Collapse>
+          
+        </ReactBootstrap.Navbar>
+      </div>
+    )
+  }
+}
+
+
+class Foot extends Component {
+  render() {
+    return (
+      <div id="footer">
+        <ReactBootstrap.Navbar bg="success" expand="lg" fixed="bottom" >
+          <ReactBootstrap.Container>
+            <ReactBootstrap.NavbarBrand>Footer</ReactBootstrap.NavbarBrand>
+          </ReactBootstrap.Container>
+        </ReactBootstrap.Navbar>
+      </div>
+    )
   }
 }
 

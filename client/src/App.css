@@ -3,11 +3,9 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  background-color:rgba(255,255,255,0.8);
-  width: 80%;
+  
+  width: 100%;
   margin-bottom: 5px;
-  top: 10%;
-  left: 10%;
 }
 
 .container > h2 {
@@ -15,15 +13,48 @@
 }
 
 .proteges, .daily {
-  width: 60%;
+  background-color:rgba(255,255,255,0.8);
   left: 10%;
-  right: 20%;
+  width: 100%;
   position:relative;
   font-size: calc(6px + 2vmin);
 }
 
+#target-txt {
+  font-size: 2em;
+  color: red
+}
+
 .daily > h1{
   text-align: right;
+}
+
+#prev-protege-btn {
+  display: inline-block  ;
+  margin-right: 1em
+}
+
+#proteges-header-container {
+  text-align: center
+}
+
+#next-protege-btn {
+  display: inline-block;
+  margin-left: 1em
+}
+
+#proteges-header {
+  display: inline-block;
+}
+
+#navbar-txt {
+  color: white
+}
+
+#menu-nav {
+  position: relative;
+  z-index: 1;
+  width: 117%
 }
 .creation-form {
   background-color: rgba(255,255,255,0.6);
@@ -33,9 +64,14 @@
   right: 2%;
   top: 20%;
   text-align: center;
-  font-size: calc(4px + 2vmin)
+  font-size: calc(4px + 2vmin);
+  z-index: 1
 }
 
 .App-link {
   color: #61dafb;
+}
+
+#footer {
+  height: 200px
 }
