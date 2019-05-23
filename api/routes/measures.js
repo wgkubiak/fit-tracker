@@ -39,4 +39,16 @@ router.get('/:id', (req, res, next) => {
     })
 })
 
+router.post('/', (request, response) => {
+    const { p_id, currentweight, waist, neck, bodyfat, measuredate } = request.body
+  
+    pool.query('INSERT INTO measures (p_id, currentweight, waist, neck, bodyfat, measuredate)\
+     VALUES ($1, $2, $3, $4, $5, $6)', [ p_id, currentweight, waist, neck, bodyfat, measuredate ], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(201).send(`Measure added with ID: ${results.p_id}`)
+    })
+})
+
 module.exports = router

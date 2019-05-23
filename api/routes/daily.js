@@ -10,6 +10,7 @@ router.get('/', (req, res, next) => {
     })
 })
 
+// TODO: Usuwajac dzien, usuwasz rowniez dane z meals i exercises
 router.get('/:id', (req, res, next) => {
     const id = parseInt(req.params.id)
 

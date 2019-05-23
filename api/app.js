@@ -10,7 +10,8 @@ var testAPIRouter = require('./routes/testAPI')
 var protegesRouter = require('./routes/proteges')
 var measuresRouter = require('./routes/measures')
 var dailyRouter = require('./routes/daily')
-
+var mealsRouter = require('./routes/meals')
+var exerciseRouter = require('./routes/exercises')
 var app = express();
 
 // view engine setup
@@ -32,6 +33,8 @@ app.use('/testAPI', testAPIRouter)
 
 app.use('/proteges', protegesRouter)
 app.use('/proteges/:id', protegesRouter)
+app.put('/proteges/:id', protegesRouter)
+app.delete('/proteges/:id', protegesRouter)
 
 app.use('/measures', measuresRouter)
 app.use('/measures/:id', measuresRouter)
@@ -40,6 +43,9 @@ app.use('/measures/last/:id', measuresRouter)
 app.use('/daily', dailyRouter)
 app.use('/daily/:id', dailyRouter)
 
+app.use('/meals', mealsRouter)
+
+app.use('/exercises', exerciseRouter)
 // End of our requests
 
 // catch 404 and forward to error handler

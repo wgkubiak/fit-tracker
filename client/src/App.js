@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import * as ReactBootstrap from 'react-bootstrap';
+import * as rb from 'react-bootstrap';
 import axios from 'axios';
 
 import './App.css';
@@ -19,7 +19,6 @@ class App extends Component {
         { <Proteges />}
         { <Measures />}
         { <Daily />}
-        { <Foot />}
       </div>
     );
   }
@@ -68,9 +67,9 @@ class Proteges extends App {
         <br></br>
         <div id="proteges-header-container">
           <span id="prev-protege-btn">
-            <ReactBootstrap.Button variant="success" size="md" active>
+            <rb.Button variant="success" size="md" active>
               <strong> &laquo; </strong>
-            </ReactBootstrap.Button>
+            </rb.Button>
           </span>
           {this.state.userResponse.map(resp => 
             <span id="proteges-header">
@@ -78,21 +77,33 @@ class Proteges extends App {
             </span>
           )}
           <span id="next-protege-btn">
-            <ReactBootstrap.Button variant="success" size="md" active>
+            <rb.Button variant="success" size="md" active>
               <strong> &raquo; </strong>
-            </ReactBootstrap.Button>
+            </rb.Button>
           </span>
         </div>
         {this.state.measuresResponse.map(resp => 
-          <h3> Do celu: <span id="target-txt">{(resp.currentweight - resp.targetweight).toFixed(1)}</span> kg</h3>
+        <div id="protege-data">
+          <h4> Dane osobowe </h4>
+          <p> Płeć: {resp.gender} </p>
+          <p> Telefon: {resp.phone} </p>
+          <p> Email: {resp.email} </p>
+          <h4> Wymiary </h4>
+          <p> Wysokość: {resp.height}cm</p>
+          <p> Cel: {resp.targetweight}kg</p>
+          <div id="target">
+            <h3> Do celu: <span id="target-txt">{(resp.currentweight - resp.targetweight).toFixed(1)}</span> kg</h3>
+          </div>
+        </div>
         )}
-
-        <ReactBootstrap.ButtonToolbar>
-          <ReactBootstrap.Button variant="success" size="md" onClick={ this.toggleDiv } active>
-            <strong>Rozwiń / Zwiń formularz</strong>
-          </ReactBootstrap.Button>
+          
+        <rb.ButtonToolbar>
+          <rb.Button className="add-btn" variant="success" size="md" onClick={ this.toggleDiv } active>
+            <strong>+</strong>
+          </rb.Button>
             { this.state.show && <ProtegesForm />}
-        </ReactBootstrap.ButtonToolbar> 
+        </rb.ButtonToolbar> 
+        <RemoveProtege />
       </div>
     );
   }
@@ -199,39 +210,68 @@ class ProtegesForm extends App {
       console.log(res)
       console.log(res.data)
     })
-    
   }
 
   render() {
     return (
       <div className="creation-form">
-      <h1>Formularz</h1>
-        <ReactBootstrap.Form onSubmit={this.handleSubmit}>
-              <ReactBootstrap.Form.Label> 
-                Imię: <input type="text" name="firstname" onChange={this.handleNameChange} placeholder="Podaj imię" required/>
-              </ReactBootstrap.Form.Label>
-              <ReactBootstrap.Form.Label> 
-                Nazwisko: <input type="text" name="secondname" onChange={this.handleSurnameChange} placeholder="Podaj nazwisko" required/>
-              </ReactBootstrap.Form.Label>
-              <ReactBootstrap.Form.Label> 
-                Telefon: <input type="text" name="phone" onChange={this.handlePhoneChange} placeholder="Podaj numer" size="9" required/>
-              </ReactBootstrap.Form.Label>
-              <ReactBootstrap.Form.Label> 
-                Email: <input type="email" name="email" onChange={this.handleEmailChange} placeholder="Podaj email" required/>
-              </ReactBootstrap.Form.Label>
-              <ReactBootstrap.Form.Label> 
-                Płeć: <input type="text" name="gender" onChange={this.handleGenderChange} placeholder="Płeć (M/F)" required/>
-              </ReactBootstrap.Form.Label>
-              <ReactBootstrap.Form.Label> 
-                Wzrost: <input type="text" name="height" onChange={this.handleHeightChange} placeholder="Podaj wzrost" required/>
-              </ReactBootstrap.Form.Label>
-              <ReactBootstrap.Form.Label> 
-                Cel: <input type="text" name="targetweight" onChange={this.handleTargetChange} placeholder="Podaj cel" required/>
-              </ReactBootstrap.Form.Label>
-            <ReactBootstrap.Button type="submit" variant="dark" size="lg" block>Zatwierdź</ReactBootstrap.Button>
-        </ReactBootstrap.Form>
+        <h2>Nowy użytkownik</h2>
+        <rb.Form onSubmit={this.handleSubmit}>
+          <rb.Row>
+            <rb.Col>
+              <rb.Form.Label> 
+                <input type="text" name="firstname" onChange={this.handleNameChange} placeholder="Imię" width="2%" required/>
+              </rb.Form.Label>
+            </rb.Col>
+            <rb.Col>
+              <rb.Form.Label> 
+                <input type="text" name="secondname" onChange={this.handleSurnameChange} placeholder="Nazwisko" required/>
+              </rb.Form.Label>
+            </rb.Col>
+          </rb.Row>
+              <rb.Form.Label> 
+                <input type="text" name="phone" onChange={this.handlePhoneChange} placeholder="Numer" size="9" required/>
+              </rb.Form.Label>
+              <rb.Form.Label> 
+                <input type="email" name="email" onChange={this.handleEmailChange} placeholder="Email" required/>
+              </rb.Form.Label>
+              <rb.Form.Label> 
+               <input type="text" name="gender" onChange={this.handleGenderChange} placeholder="Płeć (M/F)" required/>
+              </rb.Form.Label>
+              <rb.Form.Label> 
+               <input type="text" name="height" onChange={this.handleHeightChange} placeholder="Wzrost" required/>
+              </rb.Form.Label>
+              <rb.Form.Label> 
+               <input type="text" name="targetweight" onChange={this.handleTargetChange} placeholder="Cel" required/>
+              </rb.Form.Label>
+            <rb.Button type="submit" variant="success" size="lg" block>Zatwierdź</rb.Button>
+        </rb.Form>
       </div>
     );
+  }
+}
+
+class RemoveProtege extends App {
+  
+  removeProtege = event => {
+    event.preventDefault()
+
+    // axios.delete(`http://localhost:9000/proteges/${this.state.id}`)
+    axios.delete(`http://localhost:9000/proteges/33`)
+      .then(res => {
+        console.log(res)
+        console.log(res.data)
+      })
+  }
+
+  render() {
+    return (
+      <div>
+        <rb.Button className="remove-btn" variant="success" size="md" onClick={ this.removeProtege } active>
+            <strong>x</strong>
+          </rb.Button>
+      </div>
+    )
   }
 }
 
@@ -239,37 +279,16 @@ class Nav extends Component {
   render() {
     return (
       <div id="menu-nav">
-        <ReactBootstrap.Navbar fixed="top" bg="success" expand="lg">
-          <ReactBootstrap.Navbar.Brand href="#home">Fit Tracker</ReactBootstrap.Navbar.Brand>
-          <ReactBootstrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <ReactBootstrap.Navbar.Collapse id="basic-navbar-nav">
-            <ReactBootstrap.Nav className="mr-auto">
-              <ReactBootstrap.Nav.Link href="#home">Podopieczni</ReactBootstrap.Nav.Link>
-              <ReactBootstrap.Nav.Link href="#link">Wymiary</ReactBootstrap.Nav.Link>
-              <ReactBootstrap.NavDropdown title="Dodaj" id="basic-nav-dropdown">
-          <ReactBootstrap.NavDropdown.Item href="#action/3.1">Podopiecznego</ReactBootstrap.NavDropdown.Item>
-          <ReactBootstrap.NavDropdown.Item href="#action/3.2">Wymiar</ReactBootstrap.NavDropdown.Item>
-          <ReactBootstrap.NavDropdown.Item href="#action/3.3">Statystykę</ReactBootstrap.NavDropdown.Item>
-          </ReactBootstrap.NavDropdown>
-            </ReactBootstrap.Nav>
-          </ReactBootstrap.Navbar.Collapse>
-          
-        </ReactBootstrap.Navbar>
-      </div>
-    )
-  }
-}
-
-
-class Foot extends Component {
-  render() {
-    return (
-      <div id="footer">
-        <ReactBootstrap.Navbar bg="success" expand="lg" fixed="bottom" >
-          <ReactBootstrap.Container>
-            <ReactBootstrap.NavbarBrand>Footer</ReactBootstrap.NavbarBrand>
-          </ReactBootstrap.Container>
-        </ReactBootstrap.Navbar>
+        <rb.Navbar fixed="top" bg="success" expand="lg">
+          <rb.Navbar.Brand href="#home">Fit Tracker</rb.Navbar.Brand>
+          <rb.Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <rb.Navbar.Collapse id="basic-navbar-nav">
+            <rb.Nav className="mr-auto">
+              <rb.Nav.Link href="#proteges">Podopieczni</rb.Nav.Link>
+              <rb.Nav.Link href="#link">Wymiary</rb.Nav.Link>
+            </rb.Nav>
+          </rb.Navbar.Collapse>          
+        </rb.Navbar>
       </div>
     )
   }

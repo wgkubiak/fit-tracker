@@ -19,7 +19,6 @@ router.get('/:id', (req, res, next) => {
     })
 })
 
-
 router.post('/', (request, response) => {
     const { firstname, secondname, phone, email, gender, height, targetweight } = request.body
   
@@ -29,6 +28,33 @@ router.post('/', (request, response) => {
         throw error
       }
       response.status(201).send(`User added with ID: ${results.idp}`)
+    })
+})
+
+router.put('/:id', (req, res, next) => {
+    const id = parseInt(req.params.id)
+    const { phone, email, targetweight } = req.body
+  
+    pool.query(
+      'UPDATE proteges SET phone = $1, email = $2, targetweight = $3 WHERE idp = $4',
+      [phone, email, targetweight, id],
+      (error, results) => {
+        if (error) {
+          throw error
+        }
+        res.status(200).send(`User modified with ID: ${id}`)
+      }
+    )
+})
+
+router.delete('/:id', (req, res, next) => {
+    const id = parseInt(req.params.id)
+
+    pool.query('DELETE FROM proteges WHERE idp = $1', [id], (error, results) => {
+        if (error) {
+        throw error
+        }
+        res.status(200).send(`User deleted with ID: ${id}`)
     })
 })
 
