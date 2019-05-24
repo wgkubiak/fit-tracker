@@ -1,27 +1,30 @@
 DROP TABLE IF EXISTS proteges;
 
+CREATE TYPE gender AS ENUM ('Male', 'Female', 'Other')
+
 CREATE TABLE proteges(
 	idp SERIAL PRIMARY KEY,
 	firstName VARCHAR(20) NOT NULL,
     secondName VARCHAR(30) NOT NULL,
-    birthDate DATE NOT NULL,
     phone VARCHAR(9) NOT NULL,
-    email VARCHAR(50) DEFAULT NULL,
-    gender CHARACTER(1) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    gender gender NOT NULL,
 	height FLOAT(8) NOT NULL,
-	targetWeight FLOAT(8) NOT NULL
+	targetWeight FLOAT(8) NOT NULL,
+    kcalDemand FLOAT(8) NOT NULL
 );
 
-INSERT INTO proteges (firstName, secondName, birthDate, phone, email, gender, height, targetWeight) VALUES (
-    'Jan', 'Kowal', '1994-04-14', '687234123', 'jkowal@mail.com', 'M', 185.2, 82
+--- kcalDemand (age, height, weight) ---
+INSERT INTO proteges (firstName, secondName, phone, email, gender, height, targetWeight, kcaldemand) VALUES (
+    'Jan', 'Kowal', '1994-04-14', '687234123', 'jkowal@mail.com', 'Male', 185.2, 82, 2177
 ), (
-    'Michal', 'Polak', '1984-03-14', '726834569', 'mpol@mail.com', 'M', 177.5, 77
+    'Michal', 'Polak', '1984-03-14', '726834569', 'mpol@mail.com', 'Male', 177.5, 77, 1813
 ), (
-    'Anna', 'Schmidt', '1997-08-04', '682346512', 'anna@gmail.com', 'F', 165.0,  54
+    'Anna', 'Schmidt', '1997-08-04', '682346512', 'anna@gmail.com', 'Female', 165.0,  54, 1521
 ), (
-    'Janina', 'Nowak', '2000-01-11', '685123451', 'jnowak@mail.com', 'F', 170.0, 60
+    'Janina', 'Nowak', '2000-01-11', '685123451', 'jnowak@mail.com', 'Female', 170.0, 60, 1422
 ), (
-    'Anastazja', 'Maj', '1989-12-29', '646123572', 'amaj@mail.com', 'F', 175.1, 67
+    'Anastazja', 'Maj', '1989-12-29', '646123572', 'amaj@mail.com', 'Female', 175.1, 67, 1481
 );
 
 DROP TABLE IF EXISTS measures;
@@ -71,15 +74,15 @@ INSERT INTO measures (p_id, currentWeight, waist, neck, bodyFat, measureDate) VA
 DROP TABLE IF EXISTS daily;
 
 CREATE TABLE daily (
-	idd INTEGER PRIMARY KEY,
+	idd SERIAL PRIMARY KEY,
 	p_id INTEGER NOT NULL,
 	dailyDate DATE,
-	dailyKcal INTEGER NOT NULL,
+	dailyKcal INTEGER DEFAULT NULL,
 	burnedKcal INTEGER DEFAULT NULL,
 	FOREIGN KEY(p_id) REFERENCES proteges(idp)
 );
 
-INSERT INTO daily (p_id, dailyDate, dailyKcal, burnedKcal) VALUES 
+INSERT INTO daily (p_id, dailydate, dailykcal, burnedkcal) VALUES 
 	(1, '2019-04-23', 2485, 491), (1, '2019-04-24', 2497, NULL), (1, '2019-04-25', 2460, 123), 
 	(2, '2019-04-23', 2345, 291), (2, '2019-04-24', 2254, NULL), (2, '2019-04-25', 2360, 28), 
 	(3, '2019-04-23', 1532, NULL), (3, '2019-04-24', 1444, NULL), (3, '2019-04-25', 1465, NULL), 
@@ -119,7 +122,7 @@ DROP TABLE IF EXISTS exercises;
 
 CREATE TABLE exercises (
     d_id INTEGER NOT NULL,
-    exerciseName VARCHAR(30),
+    exerciseName VARCHAR(30) NOT NULL,
     startAt TIME NOT NULL,
     endAt TIME NOT NULL,
     kcalPerHour INTEGER NOT NULL,

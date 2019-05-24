@@ -95,11 +95,13 @@ class Proteges extends App {
             >
               <rb.Card.Header>Dane osobowe</rb.Card.Header>
               <rb.Card.Body>
+                <p> Data urodzenia: {resp.birthdate} </p>
                 <p> Płeć: {resp.gender} </p>
                 <p> Telefon: {resp.phone} </p>
                 <p> Email: {resp.email} </p>
                 <p> Wysokość: {resp.height}cm</p>
                 <p> Cel: {resp.targetweight}kg</p>
+                <p> Zapotrzebowanie: {resp.kcaldemand}kcal</p>
               </rb.Card.Body>
             </rb.Card>
           </div>
@@ -232,15 +234,20 @@ class ProtegesForm extends App {
   state = {
     firstname: "",
     secondname: "",
+    birthdate: "",
     phone: "",
     email: "",
     gender: "",
     height: "",
-    targetweight: ""
+    targetweight: "",
+    kcaldemand: ""
   };
 
   handleNameChange = event => {
     this.setState({ firstname: event.target.value });
+  };
+  handleDateChange = event => {
+    this.setState({ birthdate: event.target.value });
   };
   handleSurnameChange = event => {
     this.setState({ secondname: event.target.value });
@@ -260,6 +267,9 @@ class ProtegesForm extends App {
   handleTargetChange = event => {
     this.setState({ targetweight: event.target.value });
   };
+  handleDemandChange = event => {
+    this.setState({ kcaldemand: event.target.value});
+  };
 
   handleSubmit = event => {
     event.preventDefault();
@@ -268,11 +278,13 @@ class ProtegesForm extends App {
       .post("http://localhost:9000/proteges", {
         firstname: this.state.firstname,
         secondname: this.state.secondname,
+        birthdate: this.state.birthdate,
         phone: this.state.phone,
         email: this.state.email,
         gender: this.state.gender,
         height: this.state.height,
-        targetweight: this.state.targetweight
+        targetweight: this.state.targetweight,
+        kcaldemand: this.state.kcaldemand
       })
       .then(res => {
         console.log(res);
@@ -288,6 +300,7 @@ class ProtegesForm extends App {
           <rb.Row>
             <rb.Col>
               <rb.Form.Label>
+                Imię:
                 <input
                   type="text"
                   name="firstname"
@@ -300,6 +313,7 @@ class ProtegesForm extends App {
             </rb.Col>
             <rb.Col>
               <rb.Form.Label>
+                Nazwisko:
                 <input
                   type="text"
                   name="secondname"
@@ -310,6 +324,19 @@ class ProtegesForm extends App {
               </rb.Form.Label>
             </rb.Col>
           </rb.Row>
+          <rb.Col>
+              <rb.Form.Label>
+              Data urodzenia: 
+                <input
+                  type="date"
+                  name="birthdate"
+                  onChange={this.handleDateChange}
+                  placeholder="Data urodzenia"
+                  width="2%"
+                  required
+                />
+              </rb.Form.Label>
+            </rb.Col>
           <rb.Form.Label>
             <input
               type="text"
@@ -334,7 +361,7 @@ class ProtegesForm extends App {
               type="text"
               name="gender"
               onChange={this.handleGenderChange}
-              placeholder="Płeć (M/F)"
+              placeholder="Płeć (Male/Female/Other)"
               required
             />
           </rb.Form.Label>
@@ -353,6 +380,15 @@ class ProtegesForm extends App {
               name="targetweight"
               onChange={this.handleTargetChange}
               placeholder="Cel"
+              required
+            />
+          </rb.Form.Label>
+          <rb.Form.Label>
+            <input
+              type="text"
+              name="kcaldemand"
+              onChange={this.handleDemandChange}
+              placeholder="Zapotrzebowanie"
               required
             />
           </rb.Form.Label>

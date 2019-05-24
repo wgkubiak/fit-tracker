@@ -20,10 +20,10 @@ router.get('/:id', (req, res, next) => {
 })
 
 router.post('/', (request, response) => {
-    const { firstname, secondname, phone, email, gender, height, targetweight } = request.body
+    const { firstname, secondname, birthdate, phone, email, gender, height, targetweight, kcaldemand } = request.body
   
-    pool.query('INSERT INTO proteges (firstname, secondname, phone, email, gender, height, targetweight)\
-     VALUES ($1, $2, $3, $4, $5, $6, $7)', [ firstname, secondname, phone, email, gender, height, targetweight ], (error, results) => {
+    pool.query('INSERT INTO proteges (firstname, secondname, birthdate, phone, email, gender, height, targetweight, kcaldemand)\
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)', [ firstname, secondname, birthdate, phone, email, gender, height, targetweight, kcaldemand ], (error, results) => {
       if (error) {
         throw error
       }
