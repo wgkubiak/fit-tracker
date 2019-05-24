@@ -59,6 +59,12 @@ class Proteges extends App {
     this.getUserByID();
   }
 
+  convertGender = x => {
+      if(x === "Male") return "Mężczyzna"
+      else if(x === "Female") return "Kobieta"
+      else return "Inna"
+  };
+
   render() {
     return (
       <div className="proteges">
@@ -85,6 +91,7 @@ class Proteges extends App {
             </rb.Button>
           </span>
         </div>
+        <br />
         {this.state.measuresResponse.map(resp => (
           <div id="protege-data">
             <rb.Card
@@ -95,8 +102,8 @@ class Proteges extends App {
             >
               <rb.Card.Header>Dane osobowe</rb.Card.Header>
               <rb.Card.Body>
-                <p> Data urodzenia: {resp.birthdate} </p>
-                <p> Płeć: {resp.gender} </p>
+                <p> Urodzony/a: {resp.birthdate.slice(0, -14)} </p>
+                <p> Płeć: {this.convertGender(resp.gender)} </p>
                 <p> Telefon: {resp.phone} </p>
                 <p> Email: {resp.email} </p>
                 <p> Wysokość: {resp.height}cm</p>
@@ -268,7 +275,7 @@ class ProtegesForm extends App {
     this.setState({ targetweight: event.target.value });
   };
   handleDemandChange = event => {
-    this.setState({ kcaldemand: event.target.value});
+    this.setState({ kcaldemand: event.target.value });
   };
 
   handleSubmit = event => {
@@ -295,106 +302,106 @@ class ProtegesForm extends App {
   render() {
     return (
       <div className="creation-form">
-        <h2>Nowy użytkownik</h2>
+      <br/>
         <rb.Form onSubmit={this.handleSubmit}>
-          <rb.Row>
-            <rb.Col>
-              <rb.Form.Label>
-                Imię:
-                <input
-                  type="text"
-                  name="firstname"
-                  onChange={this.handleNameChange}
-                  placeholder="Imię"
-                  width="2%"
-                  required
-                />
-              </rb.Form.Label>
+          <rb.FormGroup>
+              <rb.Row>
+                  <rb.Col md={12}>
+              <rb.FormControl
+                type="text"
+                name="firstname"
+                size="md"
+                onChange={this.handleNameChange}
+                placeholder="Imię"
+                required
+              />
             </rb.Col>
-            <rb.Col>
-              <rb.Form.Label>
-                Nazwisko:
-                <input
-                  type="text"
-                  name="secondname"
-                  onChange={this.handleSurnameChange}
-                  placeholder="Nazwisko"
-                  required
-                />
-              </rb.Form.Label>
+            <rb.Col md={12}>
+              <rb.FormControl
+                type="text"
+                name="secondname"
+                onChange={this.handleSurnameChange}
+                placeholder="Nazwisko"
+                required
+              />
+            </rb.Col>
+              </rb.Row>
+          </rb.FormGroup>
+            <rb.FormGroup>
+          <rb.Row>
+              <rb.Col md={12}>
+              <rb.FormControl
+                type="date"
+                name="birthdate"
+                onChange={this.handleDateChange}
+                required
+              />
+            </rb.Col>
+              <rb.Col md={12}>
+              <rb.FormControl
+                as="select"
+                name="gender"
+                onChange={this.handleGenderChange}
+                required
+              >
+                <option>Wybierz płeć...</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </rb.FormControl>
             </rb.Col>
           </rb.Row>
-          <rb.Col>
-              <rb.Form.Label>
-              Data urodzenia: 
-                <input
-                  type="date"
-                  name="birthdate"
-                  onChange={this.handleDateChange}
-                  placeholder="Data urodzenia"
-                  width="2%"
-                  required
-                />
-              </rb.Form.Label>
+          </rb.FormGroup>
+            <rb.FormGroup>
+                <rb.Row>
+            <rb.Col md={12}>
+              <rb.FormControl
+                type="text"
+                name="phone"
+                onChange={this.handlePhoneChange}
+                placeholder="Numer telefonu (9 znaków)"
+                size="9"
+                required
+              />
             </rb.Col>
-          <rb.Form.Label>
-            <input
-              type="text"
-              name="phone"
-              onChange={this.handlePhoneChange}
-              placeholder="Numer"
-              size="9"
-              required
-            />
-          </rb.Form.Label>
-          <rb.Form.Label>
-            <input
-              type="email"
-              name="email"
-              onChange={this.handleEmailChange}
-              placeholder="Email"
-              required
-            />
-          </rb.Form.Label>
-          <rb.Form.Label>
-            <input
-              type="text"
-              name="gender"
-              onChange={this.handleGenderChange}
-              placeholder="Płeć (Male/Female/Other)"
-              required
-            />
-          </rb.Form.Label>
-          <rb.Form.Label>
-            <input
-              type="text"
-              name="height"
-              onChange={this.handleHeightChange}
-              placeholder="Wzrost"
-              required
-            />
-          </rb.Form.Label>
-          <rb.Form.Label>
-            <input
-              type="text"
-              name="targetweight"
-              onChange={this.handleTargetChange}
-              placeholder="Cel"
-              required
-            />
-          </rb.Form.Label>
-          <rb.Form.Label>
-            <input
-              type="text"
-              name="kcaldemand"
-              onChange={this.handleDemandChange}
-              placeholder="Zapotrzebowanie"
-              required
-            />
-          </rb.Form.Label>
-          <rb.Button type="submit" variant="dark" size="lg" block>
-            Zatwierdź
-          </rb.Button>
+                <rb.Col md={12}>
+              <rb.FormControl
+                type="email"
+                name="email"
+                onChange={this.handleEmailChange}
+                placeholder="Adres email"
+                required
+              />
+                </rb.Col>
+            </rb.Row>
+          </rb.FormGroup>
+          <rb.FormGroup>
+              <rb.FormControl
+                type="text"
+                name="height"
+                onChange={this.handleHeightChange}
+                placeholder="Wzrost"
+                required
+              />
+              <rb.FormControl
+                type="text"
+                name="targetweight"
+                onChange={this.handleTargetChange}
+                placeholder="Waga docelowa"
+                required
+              />
+              <rb.FormControl
+                type="text"
+                name="kcaldemand"
+                onChange={this.handleDemandChange}
+                placeholder="Zapotrzebowanie kcal"
+                required
+              />
+              <rb.Button type="submit" variant="dark" size="lg" block>
+                  Zatwierdź
+              </rb.Button>
+          </rb.FormGroup>
+
         </rb.Form>
       </div>
     );
