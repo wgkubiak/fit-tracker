@@ -6,10 +6,10 @@ import './App.css';
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       globalID: 0
-    }
+    };
   }
 
   render() {
@@ -26,12 +26,12 @@ class App extends Component {
 
 class Proteges extends App {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       show: false,
       measuresResponse: [],
       userResponse: []
-    }
+    };
     this.toggleDiv = this.toggleDiv.bind(this)
   }
 
@@ -50,21 +50,21 @@ class Proteges extends App {
   }
 
   toggleDiv() {
-    const { show } = this.state
+    const { show } = this.state;
     this.setState({ show : !show})
   }
 
   componentDidMount() {
-    this.getLastMeasure()
+    this.getLastMeasure();
     this.getUserByID()
   }
 
   render() {
     return(
       <div className="proteges">
-        <br></br>
-        <br></br>
-        <br></br>
+        <br/>
+        <br/>
+        <br/>
         <div id="proteges-header-container">
           <span id="prev-protege-btn">
             <rb.Button variant="success" size="md" active>
@@ -84,21 +84,25 @@ class Proteges extends App {
         </div>
         {this.state.measuresResponse.map(resp => 
         <div id="protege-data">
-          <h4> Dane osobowe </h4>
-          <p> Płeć: {resp.gender} </p>
-          <p> Telefon: {resp.phone} </p>
-          <p> Email: {resp.email} </p>
-          <h4> Wymiary </h4>
-          <p> Wysokość: {resp.height}cm</p>
-          <p> Cel: {resp.targetweight}kg</p>
-          <div id="target">
-            <h3> Do celu: <span id="target-txt">{(resp.currentweight - resp.targetweight).toFixed(1)}</span> kg</h3>
-          </div>
+          <rb.Card className="text-center" bg="success"  text="white" style={{ width : '100%'}}>
+            <rb.Card.Header>Dane osobowe</rb.Card.Header>
+            <rb.Card.Body>
+              <p> Płeć: {resp.gender} </p>
+              <p> Telefon: {resp.phone} </p>
+              <p> Email: {resp.email} </p>
+              <p> Wysokość: {resp.height}cm</p>
+              <p> Cel: {resp.targetweight}kg</p>
+            </rb.Card.Body>
+          </rb.Card>
         </div>
         )}
-          
+        {this.state.measuresResponse.map(resp=>
+            <div id="target">
+              <h3> Do celu: <span id="target-txt">{(resp.currentweight - resp.targetweight).toFixed(1)}</span> kg</h3>
+            </div>
+        )}
         <rb.ButtonToolbar>
-          <rb.Button className="add-btn" variant="success" size="md" onClick={ this.toggleDiv } active>
+          <rb.Button className="add-btn" variant="dark" size="md" onClick={ this.toggleDiv } active>
             <strong>+</strong>
           </rb.Button>
             { this.state.show && <ProtegesForm />}
@@ -111,7 +115,7 @@ class Proteges extends App {
 
 class Measures extends App {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       measuresByIDResponse: []
     }
@@ -160,7 +164,7 @@ class Measures extends App {
 
 class Daily extends App {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       dailyResponse: []
     }
@@ -186,13 +190,13 @@ class ProtegesForm extends App {
     targetweight: ''
   }
   
-  handleNameChange = event => { this.setState({ firstname : event.target.value });}
-  handleSurnameChange = event => { this.setState({ secondname : event.target.value });}
-  handlePhoneChange = event => { this.setState({ phone : event.target.value });}
-  handleEmailChange = event => { this.setState({ email : event.target.value });}
-  handleGenderChange = event => { this.setState({ gender : event.target.value });}
-  handleHeightChange = event => { this.setState({ height : event.target.value });}
-  handleTargetChange = event => { this.setState({ targetweight : event.target.value });}
+  handleNameChange = event => { this.setState({ firstname : event.target.value });};
+  handleSurnameChange = event => { this.setState({ secondname : event.target.value });};
+  handlePhoneChange = event => { this.setState({ phone : event.target.value });};
+  handleEmailChange = event => { this.setState({ email : event.target.value });};
+  handleGenderChange = event => { this.setState({ gender : event.target.value });};
+  handleHeightChange = event => { this.setState({ height : event.target.value });};
+  handleTargetChange = event => { this.setState({ targetweight : event.target.value });};
 
   handleSubmit = event => {
     event.preventDefault()
@@ -210,7 +214,7 @@ class ProtegesForm extends App {
       console.log(res)
       console.log(res.data)
     })
-  }
+  };
 
   render() {
     return (
@@ -244,7 +248,7 @@ class ProtegesForm extends App {
               <rb.Form.Label> 
                <input type="text" name="targetweight" onChange={this.handleTargetChange} placeholder="Cel" required/>
               </rb.Form.Label>
-            <rb.Button type="submit" variant="success" size="lg" block>Zatwierdź</rb.Button>
+            <rb.Button type="submit" variant="dark" size="lg" block>Zatwierdź</rb.Button>
         </rb.Form>
       </div>
     );
@@ -252,14 +256,13 @@ class ProtegesForm extends App {
 }
 
 class RemoveProtege extends App {
-  
   removeProtege = event => {
-    event.preventDefault()
+    event.preventDefault();
 
     // axios.delete(`http://localhost:9000/proteges/${this.state.id}`)
     axios.delete(`http://localhost:9000/proteges/33`)
       .then(res => {
-        console.log(res)
+        console.log(res);
         console.log(res.data)
       })
   }
@@ -279,7 +282,7 @@ class Nav extends Component {
   render() {
     return (
       <div id="menu-nav">
-        <rb.Navbar fixed="top" bg="success" expand="lg">
+        <rb.Navbar fixed="top" bg="dark" variant="dark" expand="lg">
           <rb.Navbar.Brand href="#home">Fit Tracker</rb.Navbar.Brand>
           <rb.Navbar.Toggle aria-controls="basic-navbar-nav" />
           <rb.Navbar.Collapse id="basic-navbar-nav">
