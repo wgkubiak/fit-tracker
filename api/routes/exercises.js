@@ -11,6 +11,15 @@ router.get('/', (req, res, next) => {
   })
 })
 
+router.get('/:id', (req, res, next) => {
+  const id = parseInt(req.params.id)
+
+  pool.query('SELECT exercises.* FROM proteges JOIN daily ON idp = p_id JOIN exercises ON\
+   idd = d_id WHERE idp = $1', [id], (error, results) => {
+      if(error) { throw error }
+      res.status(200).json(results.rows)
+  })
+})
 //TODO: Zmień dane w insercie
 
 router.post('/', (request, response) => {

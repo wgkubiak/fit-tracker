@@ -31,4 +31,16 @@ router.get('/:id', (req, res, next) => {
     })
 })
 
+router.post('/', (request, response) => {
+    const { p_id, dailydate } = request.body
+  
+    pool.query('INSERT INTO daily (p_id, dailydate)\
+     VALUES ($1, $2)', [ p_id, dailydate ], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(201).send(`User added with ID: ${results.p_id}`)
+    })
+})
+
 module.exports = router

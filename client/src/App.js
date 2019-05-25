@@ -8,7 +8,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      globalID: 0
+      globalID: "",
+      dailyID: ""
     };
   }
 
@@ -19,6 +20,7 @@ class App extends Component {
         {<Proteges />}
         {<Measures />}
         {<Daily />}
+        {<ExercisesMealsCtrl /> }
       </div>
     );
   }
@@ -214,6 +216,7 @@ class Daily extends App {
   render() {
     return (
       <div className="daily">
+      {<CreateDaily />}
         <table className="table">
           <thead className="thead-dark">
             <tr>
@@ -232,6 +235,7 @@ class Daily extends App {
             ))}
           </tbody>
         </table>
+        <br/>
       </div>
     );
   }
@@ -434,6 +438,115 @@ class RemoveProtege extends App {
       </div>
     );
   }
+}
+
+class CreateDaily extends App {
+  state = {
+    dailydate: ""
+  };
+
+  handleDateChange = event => {
+    this.setState({ dailydate: event.target.value });
+  };
+  
+
+  handleSubmit = event => {
+    event.preventDefault();
+    axios
+      .post("http://localhost:9000/daily", {
+        p_id: "1",
+        dailydate: this.state.dailydate,
+      })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      });
+  };
+
+  render() {
+    return (
+      <div className="daily-form">
+      <br/>
+        <rb.Form onSubmit={this.handleSubmit}>
+            <rb.FormGroup>
+              <rb.FormControl
+                type="date"
+                name="dailydate"
+                onChange={this.handleDateChange}
+                required
+              />               
+              <rb.Button type="submit" variant="success" size="lg" block>
+                  Zatwierdź
+              </rb.Button>
+          </rb.FormGroup>
+        </rb.Form>
+      </div>
+    );
+  }
+}
+
+class ExercisesMealsCtrl extends App {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showExercisesForm: false,
+      showMealsForm: false
+    };
+    this.toggleExercises = this.toggleExercises.bind(this);
+    this.toggleMeals = this.toggleMeals.bind(this);
+  }
+
+  toggleExercises() {
+    const { showExercisesForm } = this.state;
+    this.setState({ showExercisesForm: !showExercisesForm });
+  }
+
+  toggleMeals() {
+    const { showMealsForm } = this.state;
+    this.setState({ showMealsForm: !showMealsForm });
+  }
+
+  render() {
+    return(
+    <div className="ex-meal-container">
+      
+    <rb.ButtonToolbar>
+    <rb.ButtonGroup className="mt-3">
+          <rb.Button
+            className="ex-btn"
+            variant="success"
+            size="md"
+            onClick={this.toggleExercises}
+           
+          >
+            Dodaj ćwiczenie
+          </rb.Button>
+          {this.state.showExercisesForm && <ExercisesForm />}
+
+          <rb.Button
+            className="meals-btn"
+            variant="success"
+            size="md"
+            onClick={this.toggleMeals}
+            
+          >
+            Dodaj posiłek
+          </rb.Button>
+          {this.state.showMealsForm && <MealsForm />}
+          </rb.ButtonGroup>
+        </rb.ButtonToolbar>
+        
+    </div>
+    )
+  }
+}
+
+class ExercisesForm extends App {
+
+}
+
+class MealsForm extends App {
+
 }
 
 class Nav extends Component {

@@ -46,6 +46,7 @@ app.use('/daily/:id', dailyRouter)
 app.use('/meals', mealsRouter)
 
 app.use('/exercises', exerciseRouter)
+app.use('/exercises/:id', exerciseRouter)
 // End of our requests
 
 // catch 404 and forward to error handler
