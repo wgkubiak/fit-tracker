@@ -20,7 +20,6 @@ class App extends Component {
         {<Proteges />}
         {<Measures />}
         {<Daily />}
-        {<ExercisesMealsCtrl /> }
       </div>
     );
   }
@@ -31,10 +30,14 @@ class Proteges extends App {
     super(props);
     this.state = {
       show: false,
+      showExercisesForm: false,
+      showMealsForm: false,
       measuresResponse: [],
       userResponse: []
     };
     this.toggleDiv = this.toggleDiv.bind(this);
+    this.toggleExercises = this.toggleExercises.bind(this);
+    this.toggleMeals = this.toggleMeals.bind(this);
   }
 
   getLastMeasure() {
@@ -52,8 +55,24 @@ class Proteges extends App {
   }
 
   toggleDiv() {
-    const { show } = this.state;
+    const { show, showExercisesForm, showMealsForm } = this.state;
     this.setState({ show: !show });
+    this.setState({ showExercisesForm: false });
+    this.setState({ showMealsForm: false });
+  }
+
+  toggleExercises() {
+    const { show, showExercisesForm, showMealsForm } = this.state;
+    this.setState({ show: false});
+    this.setState({ showExercisesForm: !showExercisesForm });
+    this.setState({ showMealsForm: false });
+  }
+
+  toggleMeals() {
+    const { show, showExercisesForm, showMealsForm } = this.state;
+    this.setState({ show: false });
+    this.setState({ showExercisesForm: false });
+    this.setState({ showMealsForm: !showMealsForm });
   }
 
   componentDidMount() {
@@ -98,7 +117,7 @@ class Proteges extends App {
           <div id="protege-data">
             <rb.Card
               className="text-center"
-              bg="success"
+              bg="dark"
               text="white"
               style={{ width: "100%" }}
             >
@@ -140,6 +159,31 @@ class Proteges extends App {
           {this.state.show && <ProtegesForm />}
         </rb.ButtonToolbar>
         <RemoveProtege />
+        <rb.ButtonToolbar>
+    <rb.ButtonGroup className="mt-3">
+          <rb.Button
+            className="ex-btn"
+            variant="success"
+            size="md"
+            onClick={this.toggleExercises}
+           
+          >
+            Dodaj ćwiczenie
+          </rb.Button>
+          {this.state.showExercisesForm && <ExercisesForm />}
+
+          <rb.Button
+            className="meals-btn"
+            variant="success"
+            size="md"
+            onClick={this.toggleMeals}
+            
+          >
+            Dodaj posiłek
+          </rb.Button>
+          {this.state.showMealsForm && <MealsForm />}
+          </rb.ButtonGroup>
+        </rb.ButtonToolbar>
       </div>
     );
   }
@@ -213,32 +257,41 @@ class Daily extends App {
     this.getDailies();
   }
 
+  resultMessage = (demand, burned, daily) => {
+    let temp = demand + burned - daily;  
+    if(temp < -50) {
+      return "Wymaga poprawy - za dużo kcal"
+    } else if(temp > 50) {
+      return "Wymaga poprawy - za mało kcal"
+    } else
+      return "Idealnie"
+  }
+
   render() {
     return (
       <div className="daily">
-      {<CreateDaily />}
-        <table className="table">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col">Data</th>
-              <th scope="col">Spożyte [Kcal]</th>
-              <th scope="col">Spalone [Kcal]</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.dailyResponse.map(resp => (
-              <tr>
-                <th scope="row">{resp.dailydate.slice(0, -14)}</th>
-                <td>{resp.dailykcal}</td>
-                <td>{resp.burnedkcal}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          {this.state.dailyResponse.map(resp => (
+                  <div className="proteges">
+                      <rb.Card
+                          className="text-center"
+                          bg="dark"
+                          text="white"
+                          style={{width: "100%"}}
+                      >
+                          <rb.Card.Header>Ostatni dzień pomiarowy ({resp.dailydate.slice(0, -14)})</rb.Card.Header>
+                          <rb.Card.Body>
+                              <p> Spożyte kcal: {resp.dailykcal} Spalone kcal: {resp.burnedkcal} </p>
+                              <p> Rezultat: {(resp.kcaldemand+resp.burnedkcal-resp.dailykcal)}kcal </p>
+                              <p> {this.resultMessage(resp.kcaldemand, resp.burnedkcal, resp.dailykcal)} </p>
+                          </rb.Card.Body>
+                      </rb.Card>
+                  </div>
+              )
+          )
+        }
         <br/>
-      </div>
-    );
-  }
+          </div>
+    )}
 }
 
 class ProtegesForm extends App {
@@ -485,68 +538,23 @@ class CreateDaily extends App {
   }
 }
 
-class ExercisesMealsCtrl extends App {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showExercisesForm: false,
-      showMealsForm: false
-    };
-    this.toggleExercises = this.toggleExercises.bind(this);
-    this.toggleMeals = this.toggleMeals.bind(this);
-  }
-
-  toggleExercises() {
-    const { showExercisesForm } = this.state;
-    this.setState({ showExercisesForm: !showExercisesForm });
-  }
-
-  toggleMeals() {
-    const { showMealsForm } = this.state;
-    this.setState({ showMealsForm: !showMealsForm });
-  }
-
-  render() {
+class ExercisesForm extends App {render() {
     return(
-    <div className="ex-meal-container">
-      
-    <rb.ButtonToolbar>
-    <rb.ButtonGroup className="mt-3">
-          <rb.Button
-            className="ex-btn"
-            variant="success"
-            size="md"
-            onClick={this.toggleExercises}
-           
-          >
-            Dodaj ćwiczenie
-          </rb.Button>
-          {this.state.showExercisesForm && <ExercisesForm />}
-
-          <rb.Button
-            className="meals-btn"
-            variant="success"
-            size="md"
-            onClick={this.toggleMeals}
-            
-          >
-            Dodaj posiłek
-          </rb.Button>
-          {this.state.showMealsForm && <MealsForm />}
-          </rb.ButtonGroup>
-        </rb.ButtonToolbar>
-        
-    </div>
+        <div>
+            <h1>Hiiii</h1>
+        </div>
     )
-  }
 }
-
-class ExercisesForm extends App {
-
 }
 
 class MealsForm extends App {
-
+    render() {
+        return(
+        <div>
+            <h1>Hiiii</h1>
+        </div>
+        )
+    }
 }
 
 class Nav extends Component {

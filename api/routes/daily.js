@@ -13,8 +13,8 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
     const id = parseInt(req.params.id)
 	
-    pool.query('SELECT * FROM\
-     proteges JOIN daily ON idp = p_id WHERE idp = $1', [id], (error, results) => {
+    pool.query('SELECT proteges.*, daily.* FROM proteges JOIN daily ON\
+	idp = p_id WHERE dailydate = (SELECT MAX(dailydate) FROM daily) AND idp = $1', [id], (error, results) => {
         if(error) { throw error }
         res.status(200).json(results.rows)
     })
@@ -25,7 +25,8 @@ router.get('/:id', (req, res, next) => {
     const {id} = parseInt(req.params.id)
 	
     pool.query('SELECT daily.* FROM\
-     proteges JOIN daily ON idp = p_id WHERE idp = $1 AND EXTRACT(month FROM dailydate) = 4', [id], (error, results) => {
+     proteges JOIN daily ON idp = p_id WHERE idp = $1 AND\
+	 EXTRACT(month FROM dailydate) = 4', [id], (error, results) => {
         if(error) { throw error }
         res.status(200).json(results.rows)
     })
