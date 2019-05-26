@@ -218,7 +218,7 @@ class Measures extends App {
   }
 
   getMeasureByID() {
-    fetch("http://localhost:9000/measures/1")
+    fetch(`http://localhost:9000/measures/${i}`)
       .then(res => res.json())
       .then(res => this.setState({ measuresByIDResponse: res }))
       .catch(err => err);
@@ -267,7 +267,7 @@ class Daily extends App {
   }
 
   getDailies() {
-    fetch("http://localhost:9000/daily/1")
+    fetch(`http://localhost:9000/daily/${i}`)
       .then(res => res.json())
       .then(res => this.setState({ dailyResponse: res }))
       .catch(err => err);
@@ -486,8 +486,9 @@ class ProtegesForm extends App {
 class RemoveProtege extends App {
   removeProtege = event => {
 
+    // TODO: Spraw aby można było usuwać użytkowników nie pustych
     // axios.delete(`http://localhost:9000/proteges/${this.state.id}`)
-    axios.delete(`http://localhost:9000/proteges/33`).then(res => {
+    axios.delete(`http://localhost:9000/proteges/${i}`).then(res => {
       console.log(res);
       console.log(res.data);
     });
