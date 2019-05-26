@@ -33,11 +33,12 @@ router.post('/', (request, response) => {
 
 router.put('/:id', (req, res, next) => {
     const id = parseInt(req.params.id)
-    const { phone, email, targetweight } = req.body
+    const { firstname, secondname, birthdate, phone, email, gender, height, targetweight, kcaldemand } = req.body
   
     pool.query(
-      'UPDATE proteges SET phone = $1, email = $2, targetweight = $3 WHERE idp = $4',
-      [phone, email, targetweight, id],
+      'UPDATE proteges SET firstname = $1, secondname = $2, birthdate = $3, phone = $4, email = $5, gender = $6, \
+	  height = $7, targetweight = $8, kcaldemand = $9 WHERE idp = $10',
+      [firstname, secondname, birthdate, phone, email, gender, height, targetweight, kcaldemand, id],
       (error, results) => {
         if (error) {
           throw error
