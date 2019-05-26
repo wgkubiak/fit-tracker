@@ -1,22 +1,23 @@
 import React, { Component } from "react";
 import * as rb from "react-bootstrap";
 import axios from "axios";
-
 import "./App.css";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      globalID: "",
-      dailyID: ""
-    };
-  }
+let i = localStorage.getItem('app-index')
 
+if(i === null) {
+  localStorage.setItem('app-index', 1)
+}
+
+
+
+
+
+class App extends Component {
   render() {
     return (
       <div className="container">
-        {<Nav />}
+        { <Nav /> }
         {<Proteges />}
         {<Measures />}
         {<Daily />}
@@ -41,14 +42,14 @@ class Proteges extends App {
   }
 
   getLastMeasure() {
-    fetch("http://localhost:9000/measures/last/1")
+    fetch(`http://localhost:9000/measures/last/${i}`)
       .then(res => res.json())
       .then(res => this.setState({ measuresResponse: res }))
       .catch(err => err);
   }
 
   getUserByID() {
-    fetch("http://localhost:9000/proteges/1")
+    fetch(`http://localhost:9000/proteges/${i}`)
       .then(res => res.json())
       .then(res => this.setState({ userResponse: res }))
       .catch(err => err);
@@ -86,6 +87,25 @@ class Proteges extends App {
       else return "Inna"
   };
 
+  increase() {
+    let index = localStorage.getItem('app-index');
+    index++;
+    
+    localStorage.setItem('app-index', index)
+    i = localStorage.getItem('app-index')
+    console.log(`${index} ${i}`);
+    window.location.reload()
+  }
+
+  decrease() {
+  let index = localStorage.getItem('app-index');
+  index--;
+  
+  localStorage.setItem('app-index', index)
+  i = localStorage.getItem('app-index')
+  console.log(`${index} ${i}`);
+  window.location.reload()
+}
   render() {
     return (
       <div className="proteges">
@@ -94,7 +114,7 @@ class Proteges extends App {
         <br />
         <div id="proteges-header-container">
           <span id="prev-protege-btn">
-            <rb.Button variant="success" size="md" active>
+            <rb.Button variant="success" size="md" onClick={this.decrease} active>
               <strong> &laquo; </strong>
             </rb.Button>
           </span>
@@ -107,7 +127,7 @@ class Proteges extends App {
             </span>
           ))}
           <span id="next-protege-btn">
-            <rb.Button variant="success" size="md" active>
+            <rb.Button variant="success" size="md" onClick={this.increase} active>
               <strong> &raquo; </strong>
             </rb.Button>
           </span>
@@ -336,8 +356,6 @@ class ProtegesForm extends App {
   };
 
   handleSubmit = event => {
-    event.preventDefault();
-
     axios
       .post("http://localhost:9000/proteges", {
         firstname: this.state.firstname,
@@ -467,7 +485,6 @@ class ProtegesForm extends App {
 
 class RemoveProtege extends App {
   removeProtege = event => {
-    event.preventDefault();
 
     // axios.delete(`http://localhost:9000/proteges/${this.state.id}`)
     axios.delete(`http://localhost:9000/proteges/33`).then(res => {
@@ -504,7 +521,6 @@ class CreateDaily extends App {
   
 
   handleSubmit = event => {
-    event.preventDefault();
     axios
       .post("http://localhost:9000/daily", {
         p_id: "1",
