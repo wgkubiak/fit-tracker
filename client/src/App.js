@@ -152,7 +152,7 @@ class Proteges extends App {
           </span>
         </div>
         <br />
-        {this.state.measuresResponse.map(resp => (
+        {this.state.userResponse.map(resp => (
           <div id="protege-data">
             <rb.Card
               className="text-center"
