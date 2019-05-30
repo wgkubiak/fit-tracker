@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import * as rb from "react-bootstrap";
 import axios from "axios";
 import "./App.css";
+import MealsForm from "./components/MealForm"
+import Measures from "./components/Measures"
+import utils from "./utils/constants"
 
-let i = localStorage.getItem("app-index");
 
-if (i === null) {
+if (utils.i === null) {
   localStorage.setItem("app-index", 1);
 }
 
@@ -40,14 +42,14 @@ class Proteges extends App {
   }
 
   getLastMeasure() {
-    fetch(`http://localhost:9000/measures/last/${i}`)
+    fetch(`http://localhost:9000/measures/last/${utils.i}`)
       .then(res => res.json())
       .then(res => this.setState({ measuresResponse: res }))
       .catch(err => err);
   }
 
   getUserByID() {
-    fetch(`http://localhost:9000/proteges/${i}`)
+    fetch(`http://localhost:9000/proteges/${utils.i}`)
       .then(res => res.json())
       .then(res => this.setState({ userResponse: res }))
       .catch(err => err);
@@ -101,8 +103,8 @@ class Proteges extends App {
     index++;
 
     localStorage.setItem("app-index", index);
-    i = localStorage.getItem("app-index");
-    console.log(`${index} ${i}`);
+    utils.i = localStorage.getItem("app-index");
+    console.log(`${index} ${utils.i}`);
     window.location.reload();
   }
 
@@ -111,8 +113,8 @@ class Proteges extends App {
     index--;
 
     localStorage.setItem("app-index", index);
-    i = localStorage.getItem("app-index");
-    console.log(`${index} ${i}`);
+    utils.i = localStorage.getItem("app-index");
+    console.log(`${index} ${utils.i}`);
     window.location.reload();
   }
   render() {
@@ -238,55 +240,6 @@ class Proteges extends App {
   }
 }
 
-class Measures extends App {
-  constructor(props) {
-    super(props);
-    this.state = {
-      measuresByIDResponse: []
-    };
-  }
-
-  getMeasureByID() {
-    fetch(`http://localhost:9000/measures/${i}`)
-      .then(res => res.json())
-      .then(res => this.setState({ measuresByIDResponse: res }))
-      .catch(err => err);
-  }
-
-  componentDidMount() {
-    this.getMeasureByID();
-  }
-
-  render() {
-    return (
-      <div className="proteges">
-        <table className="table">
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col">Data</th>
-              <th scope="col">Pas</th>
-              <th scope="col">Szyja</th>
-              <th scope="col">Tłuszcz</th>
-              <th scope="col">Waga</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.measuresByIDResponse.map(resp => (
-              <tr>
-                <th scope="row">{resp.measuredate.slice(0, -14)}</th>
-                <td>{resp.waist}</td>
-                <td>{resp.neck}</td>
-                <td>{resp.bodyfat.toFixed(1)}</td>
-                <td>{resp.currentweight.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-}
-
 class Daily extends App {
   constructor(props) {
     super(props);
@@ -296,7 +249,7 @@ class Daily extends App {
   }
 
   getDailies() {
-    fetch(`http://localhost:9000/daily/${i}`)
+    fetch(`http://localhost:9000/daily/${utils.i}`)
       .then(res => res.json())
       .then(res => this.setState({ dailyResponse: res }))
       .catch(err => err);
@@ -528,7 +481,7 @@ class ProtegesForm extends App {
 class RemoveProtege extends App {
   removeProtege = event => {
     // TODO: Spraw aby można było usuwać użytkowników nie pustych
-    axios.delete(`http://localhost:9000/proteges/${i}`).then(res => {
+    axios.delete(`http://localhost:9000/proteges/${utils.i}`).then(res => {
       console.log(res);
       console.log(res.data);
     });
@@ -608,7 +561,7 @@ class UserEdit extends App {
   };
 
   handleNameChange = event => {
-    this.setState({ firstname: event.target.value });
+      this.setState({ firstname: event.target.value });
   };
   handleDateChange = event => {
     this.setState({ birthdate: event.target.value });
@@ -637,7 +590,7 @@ class UserEdit extends App {
 
   handleSubmit = event => {
     axios
-      .put(`http://localhost:9000/proteges/${i}`, {
+      .put(`http://localhost:9000/proteges/${utils.i}`, {
         firstname: this.state.firstname,
         secondname: this.state.secondname,
         birthdate: this.state.birthdate,
@@ -762,24 +715,107 @@ class UserEdit extends App {
   }
 }
 class ExercisesForm extends App {
+  state = {
+    exercisename: "",
+    startat: "",
+    endat: "",
+    kcalperhour: ""
+  };
+
+  handleExerciseChange = event => {
+    this.setState({ exercisename: event.target.value });
+  };
+  handleStartChange = event => {
+    this.setState({ startat: event.target.value });
+  };
+  handleEndChange = event => {
+    this.setState({ endat: event.target.value });
+  };
+  handleKcalChange = event => {
+    this.setState({ kcalperhour: event.target.value });
+  };
+
+  handleSubmit = event => {
+    axios
+      .post("http://localhost:9000/exercises", {
+        d_id: utils.did,
+        exercisename: this.state.exercisename,
+        startat: this.state.startat,
+        endat: this.state.endat,
+        kcalperhour: this.state.kcalperhour
+      })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      });
+  };
+
   render() {
     return (
-      <div>
-        <h1>Hiiii</h1>
+      <div className="creation-form">
+        <br />
+        <rb.Form onSubmit={this.handleSubmit}>
+          <rb.FormGroup>
+            <rb.Row>
+              <rb.Col md={12}>
+                <rb.FormControl
+                  type="text"
+                  name="exercisename"
+                  size="md"
+                  onChange={this.handleExerciseChange}
+                  placeholder="Ćwiczenie"
+                  required
+                />
+              </rb.Col>
+              <rb.Col md={12}>
+              Początek
+                <rb.FormControl
+                  type="time"
+                  name="startat"
+                  onChange={this.handleStartChange}
+                  required
+                />
+              </rb.Col>
+            </rb.Row>
+          </rb.FormGroup>
+          <rb.FormGroup>
+            <rb.Row>
+              <rb.Col md={12}>
+              Koniec
+                <rb.FormControl
+                  type="time"
+                  name="endat"
+                  onChange={this.handleEndChange}
+                  required
+                />
+              </rb.Col>
+            </rb.Row>
+          </rb.FormGroup>
+          <rb.FormGroup>
+            <rb.Row>
+              <rb.Col md={12}>
+                <rb.FormControl
+                  type="text"
+                  name="kcalperhour"
+                  onChange={this.handleKcalChange}
+                  placeholder="Kalorie spalane na godzinę"
+                  size="9"
+                  required
+                />
+              </rb.Col>
+            </rb.Row>
+          
+            <rb.Button type="submit" variant="dark" size="lg" block>
+              Zatwierdź
+            </rb.Button>
+          </rb.FormGroup>
+        </rb.Form>
       </div>
     );
   }
 }
 
-class MealsForm extends App {
-  render() {
-    return (
-      <div>
-        <h1>Hiiii</h1>
-      </div>
-    );
-  }
-}
+
 
 class Nav extends Component {
   render() {
