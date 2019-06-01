@@ -1,11 +1,12 @@
 DROP TABLE IF EXISTS proteges;
 
-CREATE TYPE gender AS ENUM ('Male', 'Female', 'Other')
+CREATE TYPE gender AS ENUM ('Male', 'Female', 'Other');
 
 CREATE TABLE proteges(
 	idp SERIAL PRIMARY KEY,
 	firstName VARCHAR(20) NOT NULL,
     secondName VARCHAR(30) NOT NULL,
+    birthdate DATE NOT NULL,
     phone VARCHAR(9) NOT NULL,
     email VARCHAR(50) NOT NULL,
     gender gender NOT NULL,
@@ -15,7 +16,7 @@ CREATE TABLE proteges(
 );
 
 --- kcalDemand (age, height, weight) ---
-INSERT INTO proteges (firstName, secondName, phone, email, gender, height, targetWeight, kcaldemand) VALUES (
+INSERT INTO proteges (firstName, secondName, birthdate, phone, email, gender, height, targetWeight, kcaldemand) VALUES (
     'Jan', 'Kowal', '1994-04-14', '687234123', 'jkowal@mail.com', 'Male', 185.2, 82, 2177
 ), (
     'Michal', 'Polak', '1984-03-14', '726834569', 'mpol@mail.com', 'Male', 177.5, 77, 1813
@@ -76,7 +77,7 @@ DROP TABLE IF EXISTS daily;
 CREATE TABLE daily (
 	idd SERIAL PRIMARY KEY,
 	p_id INTEGER NOT NULL,
-	dailyDate DATE,
+	dailyDate DATE NOT NULL,
 	dailyKcal INTEGER DEFAULT NULL,
 	burnedKcal INTEGER DEFAULT NULL,
 	FOREIGN KEY(p_id) REFERENCES proteges(idp)
@@ -87,7 +88,7 @@ INSERT INTO daily (p_id, dailydate, dailykcal, burnedkcal) VALUES
 	(2, '2019-04-23', 2345, 291), (2, '2019-04-24', 2254, NULL), (2, '2019-04-25', 2360, 28), 
 	(3, '2019-04-23', 1532, NULL), (3, '2019-04-24', 1444, NULL), (3, '2019-04-25', 1465, NULL), 
 	(4, '2019-04-23', 1622, 121), (4, '2019-04-24', 1754, NULL), (4, '2019-04-25', 1672, NULL), 
-	(5, '2019-04-23', 1742, NULL), (5, 	'2019-04-24', 1614, NULL), (5, '2019-04-25', 1722, 432);
+	(5, '2019-04-23', 1742, NULL), (5, '2019-04-24', 1614, NULL), (5, '2019-04-25', 1722, 432));
 
 DROP TABLE IF EXISTS meals;
 
@@ -121,15 +122,15 @@ INSERT INTO meals (d_id, mealName, kcalPerDg, gramature) VALUES (
 DROP TABLE IF EXISTS exercises;
 
 CREATE TABLE exercises (
-    d_id INTEGER NOT NULL,
+    d_did INTEGER NOT NULL,
     exerciseName VARCHAR(30) NOT NULL,
     startAt TIME NOT NULL,
     endAt TIME NOT NULL,
     kcalPerHour INTEGER NOT NULL,
-    FOREIGN KEY (d_id) REFERENCES daily(idd)
+    FOREIGN KEY (d_did) REFERENCES daily(idd)
 );
 
-INSERT INTO exercises (d_id, exerciseName, startAt, endAt, kcalPerHour) VALUES 
+INSERT INTO exercises (d_did, exerciseName, startAt, endAt, kcalPerHour) VALUES 
 	(1, 'Bieg 10km/h', '14:20', '14:46', 1050),
 	(3, 'Badminton', '7:20', '7:35', 490),
 	(4, 'Pilka nozna', '14:00', '14:20', 1500),

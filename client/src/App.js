@@ -589,6 +589,7 @@ class UserEdit extends App {
   };
 
   handleSubmit = event => {
+    event.preventDefault()
     axios
       .put(`http://localhost:9000/proteges/${utils.i}`, {
         firstname: this.state.firstname,
@@ -605,6 +606,8 @@ class UserEdit extends App {
         console.log(res);
         console.log(res.data);
       });
+
+      window.location.reload();
   };
 
   render() {
