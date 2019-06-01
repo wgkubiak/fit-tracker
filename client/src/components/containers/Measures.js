@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import * as rb from "react-bootstrap";
-import axios from "axios";
-import "./../App.css"
-import utils from "./../utils/constants"
+import "./../../App.css"
+import utils from "./../../utils/constants"
 
 class Measures extends Component {
     constructor(props) {

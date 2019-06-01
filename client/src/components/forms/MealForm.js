@@ -1,31 +1,35 @@
 import React, { Component } from "react";
 import * as rb from "react-bootstrap";
 import axios from "axios";
-import "./../App.css"
-import utils from "./../utils/constants"
+import "./../../App.css"
 
 class MealsForm extends Component {
     state = {
+      d_id: "",
       mealname: "",
       kcalperdg: "",
       gramature: ""
     };
   
+    handleDIDChange = event => {
+      this.setState({ d_id: event.target.value })
+    }
     handleMealnameChange = event => {
-      this.setState({ exercisename: event.target.value });
+      this.setState({ mealname: event.target.value });
     };
     handleKcalDgChange = event => {
-      this.setState({ startat: event.target.value });
+      this.setState({ kcalperdg: event.target.value });
     };
     handleGramatureChange = event => {
-      this.setState({ endat: event.target.value });
+      this.setState({ gramature: event.target.value });
     };
     
   
     handleSubmit = event => {
+      event.preventDefault();
       axios
         .post("http://localhost:9000/meals", {
-          e_id: utils.did,
+          d_id: this.state.d_id,
           mealname: this.state.mealname,
           kcalperdg: this.state.kcalperdg,
           gramature: this.state.gramature
@@ -34,6 +38,7 @@ class MealsForm extends Component {
           console.log(res);
           console.log(res.data);
         });
+      window.location.reload();
     };
   
     render() {
@@ -44,6 +49,16 @@ class MealsForm extends Component {
             <rb.FormGroup>
               <rb.Row>
                 <rb.Col md={12}>
+                <rb.Col md={12}>
+                  <rb.FormControl
+                    type="text"
+                    name="d_id"
+                    onChange={this.handleDIDChange}
+                    placeholder="Wpisz ID dnia"
+                    required
+                  />
+                </rb.Col>
+
                   <rb.FormControl
                     type="text"
                     name="mealname"
