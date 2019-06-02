@@ -7,6 +7,7 @@ import ProtegesForm from "./../forms/ProtegesForm";
 import RemoveProtege from "./../btn/RemoveProtegeBtn";
 import EditProtege from "./../forms/ProtegeEditForm";
 import ExercisesForm from "./../forms/ExercisesForm";
+import MeasureForm from "./../forms/MeasuresForm";
 
 if (utils.i === null) {
   localStorage.setItem("app-index", 1);
@@ -20,6 +21,7 @@ class Proteges extends Component {
       showExercisesForm: false,
       showMealsForm: false,
       showEditForm: false,
+      showMeasureForm: false,
       measuresResponse: [],
       userResponse: []
     };
@@ -27,8 +29,10 @@ class Proteges extends Component {
     this.toggleExercises = this.toggleExercises.bind(this);
     this.toggleMeals = this.toggleMeals.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleMeasure = this.toggleMeasure.bind(this);
   }
 
+  // TODO: Try to fix bug that shows Do celu value only if u have at least 2 entries.
   getLastMeasure() {
     fetch(`http://localhost:9000/measures/last/${utils.i}`)
       .then(res => res.json())
@@ -44,35 +48,48 @@ class Proteges extends Component {
   }
 
   toggleDiv() {
-    const { show, showExercisesForm, showMealsForm, showEditForm } = this.state;
+    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
     this.setState({ show: !show });
     this.setState({ showExercisesForm: false });
     this.setState({ showMealsForm: false });
     this.setState({ showEditForm: false });
+    this.setState({ showMeasureForm: false})
   }
 
   toggleExercises() {
-    const { show, showExercisesForm, showMealsForm, showEditForm } = this.state;
+    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
     this.setState({ show: false });
     this.setState({ showExercisesForm: !showExercisesForm });
     this.setState({ showMealsForm: false });
     this.setState({ showEditForm: false });
+    this.setState({ showMeasureForm: false})
   }
 
   toggleMeals() {
-    const { show, showExercisesForm, showMealsForm, showEditForm } = this.state;
+    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
     this.setState({ show: false });
     this.setState({ showExercisesForm: false });
     this.setState({ showMealsForm: !showMealsForm });
     this.setState({ showEditForm: false });
+    this.setState({ showMeasureForm: false})
   }
 
   toggleEdit() {
-    const { show, showExercisesForm, showMealsForm, showEditForm } = this.state;
+    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
     this.setState({ show: false });
     this.setState({ showExercisesForm: false });
     this.setState({ showMealsForm: false });
     this.setState({ showEditForm: !showEditForm });
+    this.setState({ showMeasureForm: false})
+  }
+
+  toggleMeasure() {
+    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
+    this.setState({ show: false });
+    this.setState({ showExercisesForm: false });
+    this.setState({ showMealsForm: false });
+    this.setState({ showEditForm: false});
+    this.setState({ showMeasureForm: !showMeasureForm})
   }
 
   componentDidMount() {
@@ -198,6 +215,18 @@ class Proteges extends Component {
           </rb.Button>
           {this.state.showEditForm && <EditProtege />}
         </rb.ButtonToolbar>
+        <rb.ButtonToolbar>
+          <rb.Button
+            className="measure-btn"
+            variant="dark"
+            size="md"
+            onClick={this.toggleMeasure}
+          >
+            m
+          </rb.Button>
+          {this.state.showMeasureForm && <MeasureForm />}
+        </rb.ButtonToolbar>
+
         <rb.ButtonToolbar>
           <RemoveProtege />
         </rb.ButtonToolbar>

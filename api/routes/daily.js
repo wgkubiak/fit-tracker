@@ -13,20 +13,9 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
     const id = parseInt(req.params.id)
 	
-    pool.query('SELECT proteges.*, daily.* FROM proteges JOIN daily ON\
-	idp = p_id WHERE dailydate = (SELECT MAX(dailydate) FROM daily) AND idp = $1', [id], (error, results) => {
-        if(error) { throw error }
-        res.status(200).json(results.rows)
-    })
-})
-
-// TODO: Usuwajac dzien, usuwasz rowniez dane z meals i exercises
-router.get('/:id', (req, res, next) => {
-    const {id} = parseInt(req.params.id)
-	
-    pool.query('SELECT daily.* FROM\
-     proteges JOIN daily ON idp = p_id WHERE idp = $1 AND\
-	 EXTRACT(month FROM dailydate) = 4', [id], (error, results) => {
+    pool.query('SELECT * FROM daily n JOIN proteges on idp = p_id WHERE dailydate\
+     = (SELECT MAX(dailydate) FROM daily WHERE p_id = $1 GROUP BY p_id HAVING p_id\
+     = n.p_id)', [id], (error, results) => {
         if(error) { throw error }
         res.status(200).json(results.rows)
     })
@@ -35,8 +24,8 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (request, response) => {
     const { p_id, dailydate } = request.body
   
-    pool.query('INSERT INTO daily (p_id, dailydate)\
-     VALUES ($1, $2)', [ p_id, dailydate ], (error, results) => {
+    pool.query('INSERT INTO daily (p_id, dailydate) VALUES ($1, $2)',
+     [ p_id, dailydate ], (error, results) => {
       if (error) {
         throw error
       }
