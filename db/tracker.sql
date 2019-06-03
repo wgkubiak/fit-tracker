@@ -60,30 +60,40 @@ CREATE TABLE exercises (
     FOREIGN KEY (d_did) REFERENCES daily(idd)
 );
 
-CREATE OR REPLACE FUNCTION public.sum_exercises(x INTEGER) RETURNS void AS $$
+CREATE OR REPLACE FUNCTION public.sum_exercises() RETURNS TRIGGER AS $update_daily_exercises$
 DECLARE
+    x INTEGER;
     total INTEGER;
 BEGIN
+    x := TG_ARGV[0];
     SELECT sum(kcalPerHour) FROM exercises JOIN daily ON idd = d_did WHERE d_did = x INTO total;
     UPDATE daily SET burnedKcal = total WHERE idd = x;
+    RETURN NEW;
 END;
-$$ LANGUAGE PLPGSQL;
+$update_daily_exercises$ LANGUAGE PLPGSQL;
 
-CREATE OR REPLACE FUNCTION public.sum_meals(x INTEGER) RETURNS void AS $$
-DECLARE
-    total INTEGER;
-BEGIN
-    SELECT sum(kcalperdg) FROM meals JOIN daily ON idd = d_id WHERE d_id = x INTO total;
-    UPDATE daily SET dailyKcal = total WHERE idd = x;
-END;
-$$ LANGUAGE PLPGSQL;
+DROP TRIGGER update_daily_exercises ON exercises;
 
 CREATE TRIGGER update_daily_exercises 
     AFTER INSERT ON exercises
     FOR EACH ROW 
-    EXECUTE PROCEDURE public.sum_exercises(d_did);
+    EXECUTE PROCEDURE public.sum_exercises(1);
+
+CREATE OR REPLACE FUNCTION public.sum_meals() RETURNS TRIGGER AS $update_daily_meals$
+DECLARE
+    x INTEGER;
+    total INTEGER;
+BEGIN
+    x := TG_ARGV[0];
+    SELECT sum(kcalperdg) FROM meals JOIN daily ON idd = d_id WHERE d_id = x INTO total;
+    UPDATE daily SET dailyKcal = total WHERE idd = x;
+    RETURN NEW;
+END;
+$update_daily_meals$ LANGUAGE PLPGSQL;
+
+DROP TRIGGER update_daily_meals ON meals;
 
 CREATE TRIGGER update_daily_meals
     AFTER INSERT ON meals
     FOR EACH ROW
-    EXECUTE FUNCTION sum_meals(idd);
+    EXECUTE PROCEDURE sum_meals(1);
