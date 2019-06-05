@@ -60,17 +60,23 @@ CREATE TABLE exercises (
     FOREIGN KEY (d_did) REFERENCES daily(idd)
 );
 
-CREATE OR REPLACE FUNCTION public.sum_exercises() RETURNS TRIGGER AS $update_daily_exercises$
+CREATE OR REPLACE FUNCTION public.sum_exercises() RETURNS TRIGGER AS 
+$update_daily_exercises$
 DECLARE
-    x INTEGER;
     total INTEGER;
+    r daily%rowtype;
 BEGIN
-    x := TG_ARGV[0];
-    SELECT sum(kcalPerHour) FROM exercises JOIN daily ON idd = d_did WHERE d_did = x INTO total;
-    UPDATE daily SET burnedKcal = total WHERE idd = x;
+    ---SELECT sum(kcalPerHour) FROM exercises JOIN daily ON idd = d_did WHERE d_did = x INTO total;---
+    FOR r IN 
+        SELECT * FROM daily ORDER BY idd DESC
+    LOOP
+    SELECT sum(kcalPerHour) FROM exercises JOIN daily ON idd = d_did WHERE d_did = r.idd INTO total;
+    UPDATE daily SET burnedKcal = total WHERE idd = r.idd;
+    END LOOP;
     RETURN NEW;
 END;
-$update_daily_exercises$ LANGUAGE PLPGSQL;
+$update_daily_exercises$ 
+LANGUAGE PLPGSQL;
 
 DROP TRIGGER update_daily_exercises ON exercises;
 
@@ -78,15 +84,19 @@ CREATE TRIGGER update_daily_exercises
     AFTER INSERT ON exercises
     FOR EACH ROW 
     EXECUTE PROCEDURE public.sum_exercises(1);
+--- EXECUTE PROCEDURE public.sum_exercises(daily.idd); ---
 
 CREATE OR REPLACE FUNCTION public.sum_meals() RETURNS TRIGGER AS $update_daily_meals$
 DECLARE
-    x INTEGER;
+    r daily%rowtype;
     total INTEGER;
 BEGIN
-    x := TG_ARGV[0];
-    SELECT sum(kcalperdg) FROM meals JOIN daily ON idd = d_id WHERE d_id = x INTO total;
-    UPDATE daily SET dailyKcal = total WHERE idd = x;
+    FOR r IN 
+        SELECT * FROM daily ORDER BY idd DESC
+    LOOP
+    SELECT sum(kcalperdg) FROM meals JOIN daily ON idd = d_id WHERE d_id = r.idd INTO total;
+    UPDATE daily SET dailyKcal = total WHERE idd = r.idd;
+    END LOOP;
     RETURN NEW;
 END;
 $update_daily_meals$ LANGUAGE PLPGSQL;
@@ -96,4 +106,4 @@ DROP TRIGGER update_daily_meals ON meals;
 CREATE TRIGGER update_daily_meals
     AFTER INSERT ON meals
     FOR EACH ROW
-    EXECUTE PROCEDURE sum_meals(1);
+    EXECUTE PROCEDURE sum_meals();

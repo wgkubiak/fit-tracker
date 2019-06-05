@@ -20,7 +20,6 @@ router.get('/:id', (req, res, next) => {
       res.status(200).json(results.rows)
   })
 })
-//TODO: Zmień dane w insercie
 
 router.post('/', (request, response) => {
   const { d_did, exercisename, startat, endat, kcalperhour } = request.body

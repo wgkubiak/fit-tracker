@@ -12,8 +12,6 @@ router.get('/', (req, res, next) => {
     })
 })
 
-//TODO: Zmień dane w insercie, dodać na podstawie ID
-
 router.post('/', (request, response) => {
     const { d_id, mealname, kcalperdg, gramature } = request.body
   
@@ -22,7 +20,7 @@ router.post('/', (request, response) => {
       if (error) {
         throw error
       }
-      response.status(201).send(`Meal added with ID: ${results.idm}`)
+      response.status(201).send(`Meal added with ID: ${results.d_id}`)
     })
 })
 
