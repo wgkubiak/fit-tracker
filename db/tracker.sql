@@ -24,7 +24,7 @@ CREATE TABLE measures (
 	neck FLOAT(8) DEFAULT NULL,
 	bodyFat FLOAT(8) DEFAULT NULL,
 	measureDate DATE,
-	FOREIGN KEY (p_id) REFERENCES proteges(idp) ON UPDATE CASCADE
+	FOREIGN KEY (p_id) REFERENCES proteges(idp) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS daily;
@@ -35,7 +35,7 @@ CREATE TABLE daily (
 	dailyDate DATE NOT NULL,
 	dailyKcal INTEGER DEFAULT NULL,
 	burnedKcal INTEGER DEFAULT NULL,
-	FOREIGN KEY(p_id) REFERENCES proteges(idp)
+	FOREIGN KEY(p_id) REFERENCES proteges(idp) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS meals;
@@ -46,7 +46,7 @@ CREATE TABLE meals (
     mealName VARCHAR(30) NOT NULL,
     kcalPerDg INTEGER NOT NULL,
     gramature INTEGER NOT NULL,
-    FOREIGN KEY (d_id) REFERENCES daily(idd)
+    FOREIGN KEY (d_id) REFERENCES daily(idd) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS exercises;
@@ -57,7 +57,7 @@ CREATE TABLE exercises (
     startAt TIME NOT NULL,
     endAt TIME NOT NULL,
     kcalPerHour INTEGER NOT NULL,
-    FOREIGN KEY (d_did) REFERENCES daily(idd)
+    FOREIGN KEY (d_did) REFERENCES daily(idd) ON DELETE CASCADE
 );
 
 CREATE OR REPLACE FUNCTION public.sum_exercises() RETURNS TRIGGER AS 
@@ -83,7 +83,7 @@ DROP TRIGGER update_daily_exercises ON exercises;
 CREATE TRIGGER update_daily_exercises 
     AFTER INSERT ON exercises
     FOR EACH ROW 
-    EXECUTE PROCEDURE public.sum_exercises(1);
+    EXECUTE PROCEDURE sum_exercises();
 --- EXECUTE PROCEDURE public.sum_exercises(daily.idd); ---
 
 CREATE OR REPLACE FUNCTION public.sum_meals() RETURNS TRIGGER AS $update_daily_meals$

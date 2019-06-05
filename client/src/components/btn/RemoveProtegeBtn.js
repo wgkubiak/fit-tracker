@@ -8,6 +8,22 @@ class RemoveProtege extends Component {
   removeProtege = event => {
     event.preventDefault();
     // TODO: Spraw aby można było usuwać użytkowników nie pustych
+    // axios.delete(`http://localhost:9000/meals/${utils.i}`).then(res => {
+    //   console.log(res);
+    //   console.log(res.data);
+    // });
+    // axios.delete(`http://localhost:9000/exercises/${utils.i}`).then(res => {
+    //   console.log(res);
+    //   console.log(res.data);
+    // });
+    // axios.delete(`http://localhost:9000/daily/${utils.i}`).then(res => {
+    //   console.log(res);
+    //   console.log(res.data);
+    // });
+    // axios.delete(`http://localhost:9000/measures/${utils.i}`).then(res => {
+    //   console.log(res);
+    //   console.log(res.data);
+    // });
     axios.delete(`http://localhost:9000/proteges/${utils.i}`).then(res => {
       console.log(res);
       console.log(res.data);
@@ -15,6 +31,7 @@ class RemoveProtege extends Component {
     window.location.reload();
   };
 
+  
   render() {
     return (
       <div>

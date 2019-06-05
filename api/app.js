@@ -39,6 +39,7 @@ app.delete('/proteges/:id', protegesRouter)
 app.use('/measures', measuresRouter)
 app.use('/measures/:id', measuresRouter)
 app.use('/measures/last/:id', measuresRouter)
+app.delete('/measures/:id', measuresRouter)
 
 app.use('/daily', dailyRouter)
 app.use('/daily/:id', dailyRouter)
