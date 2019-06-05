@@ -200,7 +200,7 @@ class Proteges extends Component {
             onClick={this.toggleDiv}
             active
           >
-            <strong>+</strong>
+            <strong>Dodaj</strong>
           </rb.Button>
           {this.state.show && <ProtegesForm />}
         </rb.ButtonToolbar>
@@ -211,7 +211,7 @@ class Proteges extends Component {
             size="md"
             onClick={this.toggleEdit}
           >
-            e
+            Edytuj
           </rb.Button>
           {this.state.showEditForm && <EditProtege />}
         </rb.ButtonToolbar>
@@ -222,7 +222,7 @@ class Proteges extends Component {
             size="md"
             onClick={this.toggleMeasure}
           >
-            m
+            Pomiar
           </rb.Button>
           {this.state.showMeasureForm && <MeasureForm />}
         </rb.ButtonToolbar>

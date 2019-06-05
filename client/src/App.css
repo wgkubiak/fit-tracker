@@ -4,22 +4,25 @@
 
 .add-btn {
   position: fixed;
-  top: 20%;
-  right: 0%;
+  top: calc(26% + 1.1em);
+  right: calc(0% - 1em);
+  transform: rotate(-90deg) translate(100%);
   z-index: 1;
 }
 
 .edit-btn {
   position: fixed;
-  top: calc(30% + 10px);
-  right: 0%;
+  top: calc(46% + 1em);
+  transform: rotate(-90deg) translate(100%);
+  right: calc(0% - 0.95em);
   z-index: 1;
 }
 
 .measure-btn {
   position: fixed;
-  top: calc(35% + 15px);
-  right: 0%;
+  top: calc(35% + 2em);
+  transform: rotate(-90deg) translate(100%);
+  right: calc(0% - 1.2em);
   z-index: 1;
 }
 
@@ -33,9 +36,10 @@
 
 .remove-btn {
   position: fixed;
-  top: calc(25% + 5px);
-  right: 0%;
+  top: calc(55% + 1em);
+  right: calc(0% - 0.8em);
   z-index: 1;
+  transform: rotate(-90deg) translate(100%)
 }
 
 .ex-meal-container {

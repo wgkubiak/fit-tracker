@@ -25,7 +25,7 @@ class RemoveProtege extends Component {
           onClick={this.removeProtege}
           active
         >
-          <strong>x</strong>
+          <strong>Usuń</strong>
         </rb.Button>
       </div>
     );
