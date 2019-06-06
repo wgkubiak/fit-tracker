@@ -10,6 +10,9 @@
   z-index: 1;
 }
 
+#proteges-container {
+  display: inline-block;
+}
 .edit-btn {
   position: fixed;
   top: calc(46% + 1em);

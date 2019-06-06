@@ -3,6 +3,12 @@ import * as rb from "react-bootstrap";
 import "./../../App.css";
 
 class Header extends Component {
+
+  switchIntoListP = event => {
+    localStorage.setItem("switchSite", false)
+    window.location.reload()
+  }
+
   render() {
     return (
       <div id="menu-nav">
@@ -11,8 +17,7 @@ class Header extends Component {
           <rb.Navbar.Toggle aria-controls="basic-navbar-nav" />
           <rb.Navbar.Collapse id="basic-navbar-nav">
             <rb.Nav className="mr-auto">
-              <rb.Nav.Link href="#proteges">Podopieczni</rb.Nav.Link>
-              <rb.Nav.Link href="#link">Wymiary</rb.Nav.Link>
+              <rb.Nav.Link onClick={this.switchIntoListP}>Podopieczni</rb.Nav.Link>
             </rb.Nav>
           </rb.Navbar.Collapse>
         </rb.Navbar>

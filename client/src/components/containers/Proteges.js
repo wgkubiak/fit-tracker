@@ -103,25 +103,26 @@ class Proteges extends Component {
     else return "Inna";
   };
 
-  increase() {
-    let index = localStorage.getItem("app-index");
-    index++;
+  // increase() {
+  //   let index = localStorage.getItem("app-index");
+  //   index++;
+  //   localStorage.setItem("switchSite", false)
+  //   localStorage.setItem("app-index", index);
+  //   utils.i = localStorage.getItem("app-index");
+  //   console.log(`${index} ${utils.i}`);
+  //   window.location.reload();
+  // }
 
-    localStorage.setItem("app-index", index);
-    utils.i = localStorage.getItem("app-index");
-    console.log(`${index} ${utils.i}`);
-    window.location.reload();
-  }
+  // decrease() {
+  //   let index = localStorage.getItem("app-index");
+  //   index--;
 
-  decrease() {
-    let index = localStorage.getItem("app-index");
-    index--;
+  //   localStorage.setItem("app-index", index);
+  //   utils.i = localStorage.getItem("app-index");
+  //   console.log(`${index} ${utils.i}`);
+  //   window.location.reload();
+  // }
 
-    localStorage.setItem("app-index", index);
-    utils.i = localStorage.getItem("app-index");
-    console.log(`${index} ${utils.i}`);
-    window.location.reload();
-  }
   render() {
     return (
       <div className="proteges">
@@ -129,6 +130,7 @@ class Proteges extends Component {
         <br />
         <br />
         <div id="proteges-header-container">
+          {/* 
           <span id="prev-protege-btn">
             <rb.Button
               variant="success"
@@ -139,6 +141,7 @@ class Proteges extends Component {
               <strong> &laquo; </strong>
             </rb.Button>
           </span>
+          */}
           {this.state.userResponse.map(resp => (
             <span id="proteges-header">
               <h2 id="protege-header-txt">
@@ -147,6 +150,7 @@ class Proteges extends Component {
               </h2>
             </span>
           ))}
+          {/* 
           <span id="next-protege-btn">
             <rb.Button
               variant="success"
@@ -156,7 +160,9 @@ class Proteges extends Component {
             >
               <strong> &raquo; </strong>
             </rb.Button>
+          -->
           </span>
+          */}
         </div>
         <br />
         {this.state.userResponse.map(resp => (
