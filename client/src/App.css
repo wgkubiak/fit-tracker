@@ -11,7 +11,8 @@
 }
 
 #proteges-container {
-  display: inline-block;
+  left: 20%;
+  width: 50%
 }
 .edit-btn {
   position: fixed;

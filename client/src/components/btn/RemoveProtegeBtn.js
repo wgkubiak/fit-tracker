@@ -11,6 +11,7 @@ class RemoveProtege extends Component {
       console.log(res);
       console.log(res.data);
     });
+    localStorage.setItem("switchSite", false);
     window.location.reload();
   };
 

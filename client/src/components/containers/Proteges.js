@@ -17,7 +17,6 @@ class Proteges extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
       showExercisesForm: false,
       showMealsForm: false,
       showEditForm: false,
@@ -25,7 +24,6 @@ class Proteges extends Component {
       measuresResponse: [],
       userResponse: []
     };
-    this.toggleDiv = this.toggleDiv.bind(this);
     this.toggleExercises = this.toggleExercises.bind(this);
     this.toggleMeals = this.toggleMeals.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
@@ -47,18 +45,9 @@ class Proteges extends Component {
       .catch(err => err);
   }
 
-  toggleDiv() {
-    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
-    this.setState({ show: !show });
-    this.setState({ showExercisesForm: false });
-    this.setState({ showMealsForm: false });
-    this.setState({ showEditForm: false });
-    this.setState({ showMeasureForm: false})
-  }
-
   toggleExercises() {
-    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
-    this.setState({ show: false });
+    const { showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
+    
     this.setState({ showExercisesForm: !showExercisesForm });
     this.setState({ showMealsForm: false });
     this.setState({ showEditForm: false });
@@ -66,8 +55,8 @@ class Proteges extends Component {
   }
 
   toggleMeals() {
-    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
-    this.setState({ show: false });
+    const { showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
+    
     this.setState({ showExercisesForm: false });
     this.setState({ showMealsForm: !showMealsForm });
     this.setState({ showEditForm: false });
@@ -75,8 +64,8 @@ class Proteges extends Component {
   }
 
   toggleEdit() {
-    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
-    this.setState({ show: false });
+    const { showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
+    
     this.setState({ showExercisesForm: false });
     this.setState({ showMealsForm: false });
     this.setState({ showEditForm: !showEditForm });
@@ -84,7 +73,7 @@ class Proteges extends Component {
   }
 
   toggleMeasure() {
-    const { show, showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
+    const { showExercisesForm, showMealsForm, showEditForm, showMeasureForm } = this.state;
     this.setState({ show: false });
     this.setState({ showExercisesForm: false });
     this.setState({ showMealsForm: false });
@@ -198,18 +187,7 @@ class Proteges extends Component {
             </h3>
           </div>
         ))}
-        <rb.ButtonToolbar>
-          <rb.Button
-            className="add-btn"
-            variant="dark"
-            size="md"
-            onClick={this.toggleDiv}
-            active
-          >
-            <strong>Dodaj</strong>
-          </rb.Button>
-          {this.state.show && <ProtegesForm />}
-        </rb.ButtonToolbar>
+        
         <rb.ButtonToolbar>
           <rb.Button
             className="edit-btn"
