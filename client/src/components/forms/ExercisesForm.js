@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import * as rb from "react-bootstrap";
 import "./../../App.css";
 import axios from "axios";
+import utils from "../../utils/constants";
+
+utils.did = localStorage.getItem("daily-id");
 
 class ExercisesForm extends Component {
   state = {
@@ -12,9 +15,6 @@ class ExercisesForm extends Component {
     kcalperhour: ""
   };
 
-  handleDDIDChange = event => {
-    this.setState({ d_did: event.target.value });
-  };
   handleExerciseChange = event => {
     this.setState({ exercisename: event.target.value });
   };
@@ -32,7 +32,7 @@ class ExercisesForm extends Component {
     event.preventDefault();
     axios
       .post("http://localhost:9000/exercises", {
-        d_did: this.state.d_did,
+        d_did: utils.did,
         exercisename: this.state.exercisename,
         startat: this.state.startat,
         endat: this.state.endat,
@@ -52,16 +52,6 @@ class ExercisesForm extends Component {
         <rb.Form onSubmit={this.handleSubmit}>
           <rb.FormGroup>
             <rb.Row>
-              <rb.Col md={12}>
-                <rb.FormControl
-                  type="text"
-                  name="d_did"
-                  size="md"
-                  onChange={this.handleDDIDChange}
-                  placeholder="Wpisz ID dnia"
-                  required
-                />
-              </rb.Col>
               <rb.Col md={12}>
                 <rb.FormControl
                   type="text"

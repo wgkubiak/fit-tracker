@@ -2,19 +2,17 @@ import React, { Component } from "react";
 import * as rb from "react-bootstrap";
 import axios from "axios";
 import "./../../App.css";
+import utils from "../../utils/constants";
 
 class MealsForm extends Component {
   state = {
-    d_id: "",
     mealname: "",
     kcalperdg: "",
     gramature: ""
   };
 
-  handleDIDChange = event => {
-    this.setState({ d_id: event.target.value });
-  };
   handleMealnameChange = event => {
+    this.setState({ d_id: utils.did })
     this.setState({ mealname: event.target.value });
   };
   handleKcalDgChange = event => {
@@ -24,11 +22,13 @@ class MealsForm extends Component {
     this.setState({ gramature: event.target.value });
   };
 
+  // TODO: Problematyka zadania : pierw ustawiam DID, potem je zmieniam, powinno być na odwrót.
+  // DailyID ładuje się 
   handleSubmit = event => {
     event.preventDefault();
     axios
       .post("http://localhost:9000/meals", {
-        d_id: this.state.d_id,
+        d_id: utils.did,
         mealname: this.state.mealname,
         kcalperdg: this.state.kcalperdg,
         gramature: this.state.gramature
@@ -43,20 +43,12 @@ class MealsForm extends Component {
   render() {
     return (
       <div className="creation-form">
+        
         <br />
         <rb.Form onSubmit={this.handleSubmit}>
           <rb.FormGroup>
             <rb.Row>
               <rb.Col md={12}>
-                <rb.Col md={12}>
-                  <rb.FormControl
-                    type="text"
-                    name="d_id"
-                    onChange={this.handleDIDChange}
-                    placeholder="Wpisz ID dnia"
-                    required
-                  />
-                </rb.Col>
                 <rb.FormControl
                   type="text"
                   name="mealname"

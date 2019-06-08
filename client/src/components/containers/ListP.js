@@ -10,7 +10,8 @@ class ListP extends Component {
         super(props);
         this.state = {
           show: false,
-          userResponse: []
+          userResponse: [],
+          dailyresponse: []
         };
         this.toggleDiv = this.toggleDiv.bind(this);
       }
@@ -26,12 +27,19 @@ class ListP extends Component {
           .then(res => this.setState({ userResponse: res }))
           .catch(err => err);
       }
-    
-      moveToProtege = x => {
+
+      moveToProtege = (index, firstname, secondname, gender, phone, email, height, targetweight, kcaldemand,birthdate) => {
         // event.preventDefault();
-        localStorage.setItem("app-index", x);
-        localStorage.setItem("switchSite", true)
-        
+        localStorage.setItem("app-index", index);
+        localStorage.setItem("switchSite", true);
+        localStorage.setItem("firstname", firstname);
+        localStorage.setItem("secondname", secondname);
+        localStorage.setItem("gender", gender);
+        localStorage.setItem("phone", phone);
+        localStorage.setItem("email", email);
+        localStorage.setItem("height", height);
+        localStorage.setItem("targetweight", targetweight);
+        localStorage.setItem("kcaldemand", kcaldemand);  
         window.location.reload()
       }
 
@@ -72,7 +80,17 @@ class ListP extends Component {
               variant="success"
               size="sm"
               id="proteges-list"
-              onClick={() => this.moveToProtege(resp.idp)}
+              onClick={() => this.moveToProtege(
+                resp.idp,
+                resp.firstname,
+                resp.secondname,
+                resp.gender,
+                resp.phone,
+                resp.email,
+                resp.height,
+                resp.targetweight,
+                resp.kcaldemand
+                )}
               block
             >
               <strong> &raquo; </strong>

@@ -15,6 +15,7 @@ class Daily extends Component {
     fetch(`http://localhost:9000/daily/${utils.i}`)
       .then(res => res.json())
       .then(res => this.setState({ dailyResponse: res }))
+      .then(console.log(utils.did))
       .catch(err => err);
   }
 
@@ -24,6 +25,7 @@ class Daily extends Component {
 
   resultMessage = (demand, burned, daily) => {
     let temp = demand + burned - daily;
+    
     if (temp < -50) {
       return "Wymaga poprawy - za dużo kcal";
     } else if (temp > 50) {
@@ -31,11 +33,17 @@ class Daily extends Component {
     } else return "Idealnie";
   };
 
+  setDID() {
+    localStorage.setItem("daily-id", this.state.dailyResponse[0].idd)
+  }
+
   render() {
     return (
       <div className="daily">
         {this.state.dailyResponse.map(resp => (
+          
           <div className="proteges">
+            {} {this.setDID()}
             <rb.Card
               className="text-center"
               bg="dark"
@@ -43,6 +51,7 @@ class Daily extends Component {
               style={{ width: "100%" }}
             >
               <rb.Card.Header>
+                
                 (ID: {resp.idd}) Ostatni dzień pomiarowy (
                 {resp.dailydate.slice(0, -14)})
               </rb.Card.Header>

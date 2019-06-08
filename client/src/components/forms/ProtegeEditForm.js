@@ -5,19 +5,22 @@ import "./../../App.css";
 import utils from "./../../utils/constants";
 
 class EditProtege extends Component {
-  state = {
-    firstname: "",
-    secondname: "",
+  constructor(props) {
+  super(props);
+  this.state = {
+    firstname: utils.firstname,
+    secondname: utils.secondname,
     birthdate: "",
-    phone: "",
-    email: "",
-    gender: "",
-    height: "",
-    targetweight: "",
-    kcaldemand: "",
+    phone: utils.phone,
+    email: utils.email,
+    gender: utils.gender,
+    height: utils.height,
+    targetweight: utils.targetweight,
+    kcaldemand: utils.kcaldemand,
     userData: [],
     userResponse: []
-  };
+    };
+  }
 
   getUserByID() {
     fetch(`http://localhost:9000/proteges/${utils.i}`)
@@ -26,23 +29,9 @@ class EditProtege extends Component {
       .catch(err => err);
   }
 
-//   setDefaultValues() {
-//     this.state.userResponse.map(resp => (
-//       this.setState({ firstname: resp.firstname}),
-//       this.setState({ secondname: resp.secondname}),
-//       this.setState({ birthdate: resp.birthdate}),
-//       this.setState({ phone: resp.phone}),
-//       this.setState({ email: resp.email}),
-//       this.setState({ gender: resp.gender}),
-//       this.setState({ height: resp.height}),
-//       this.setState({ targetweight: resp.targetweight}),
-//       this.setState({ kcaldemand: resp.kcaldemand})
-//     )
-//   )
-// }
-
   handleNameChange = event => {
     this.setState({ firstname: event.target.value });
+    console.log(this.state.userResponse[0].firstname)
   };
   
   handleDateChange = event => {
@@ -92,10 +81,8 @@ class EditProtege extends Component {
     window.location.reload();
   };
 
-
   componentDidMount() {
     this.getUserByID();
-    //this.setDefaultValues();
   }
 
   render() {
@@ -114,7 +101,7 @@ class EditProtege extends Component {
                     size="md"
                     onChange={this.handleNameChange}
                     placeholder="Imię"
-                    
+                    value={this.state.firstname}
                     required
                   />
                 </rb.Col>
@@ -124,6 +111,7 @@ class EditProtege extends Component {
                     name="secondname"
                     onChange={this.handleSurnameChange}
                     placeholder="Nazwisko"
+                    value={this.state.secondname}
                     required
                   />
                 </rb.Col>
@@ -144,6 +132,7 @@ class EditProtege extends Component {
                     as="select"
                     name="gender"
                     onChange={this.handleGenderChange}
+                    value={this.state.gender}
                     required
                   >
                     <option>Wybierz płeć...</option>
@@ -163,6 +152,7 @@ class EditProtege extends Component {
                     onChange={this.handlePhoneChange}
                     placeholder="Numer telefonu (9 znaków)"
                     size="9"
+                    value={this.state.phone}
                     required
                   />
                 </rb.Col>
@@ -172,6 +162,7 @@ class EditProtege extends Component {
                     name="email"
                     onChange={this.handleEmailChange}
                     placeholder="Adres email"
+                    value={this.state.email}
                     required
                   />
                 </rb.Col>
@@ -183,6 +174,7 @@ class EditProtege extends Component {
                 name="height"
                 onChange={this.handleHeightChange}
                 placeholder="Wzrost"
+                value={this.state.height}
                 required
               />
               <rb.FormControl
@@ -190,6 +182,7 @@ class EditProtege extends Component {
                 name="targetweight"
                 onChange={this.handleTargetChange}
                 placeholder="Waga docelowa"
+                value={this.state.targetweight}
                 required
               />
               <rb.FormControl
@@ -197,6 +190,7 @@ class EditProtege extends Component {
                 name="kcaldemand"
                 onChange={this.handleDemandChange}
                 placeholder="Zapotrzebowanie kcal"
+                value={this.state.kcaldemand}
                 required
               />
               <rb.Button type="submit" variant="dark" size="lg" block>

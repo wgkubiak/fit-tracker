@@ -13,6 +13,7 @@ if (utils.i === null) {
   localStorage.setItem("app-index", 1);
 }
 
+
 class Proteges extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,14 @@ class Proteges extends Component {
     this.toggleMeals = this.toggleMeals.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
     this.toggleMeasure = this.toggleMeasure.bind(this);
+  }
+
+  getDailies() {
+    fetch(`http://localhost:9000/daily/${utils.i}`)
+      .then(res => res.json())
+      .then(res => this.setState({ dailyResponse: res }))
+      .then(console.log(utils.did))
+      .catch(err => err);
   }
 
   // TODO: Try to fix bug that shows Do celu value only if u have at least 2 entries.
